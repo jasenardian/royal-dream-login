@@ -3,12 +3,15 @@ import { useState } from 'react';
 import { FaHeadset, FaUser, FaFacebookF, FaGlobeAsia, FaCaretDown } from 'react-icons/fa';
 import { BsPersonFill } from 'react-icons/bs';
 import LoginForm from './LoginForm';
+import FacebookLogin from './FacebookLogin';
 
 const Home = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegion, setShowRegion] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('Asia');
   const [agreed, setAgreed] = useState(true);
+  const [showIpLimit, setShowIpLimit] = useState(false);
+  const [showFbLogin, setShowFbLogin] = useState(false);
 
   const regions = [
     'Africa',
@@ -35,13 +38,43 @@ const Home = () => {
         <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px] animate-fade-in">
           {/* Close button handled inside LoginForm or here */}
            <div className="relative z-10 w-full max-w-sm animate-pop-in">
-             <LoginForm />
+             <LoginForm onClose={() => setShowLogin(false)} />
              {/* Transparent close area behind form is handled by the overlay div itself mostly, 
                  but explicit close button is inside LoginForm component now as requested in previous design */}
            </div>
            
            {/* Click outside to close (Optional) */}
            <div className="absolute inset-0 z-0" onClick={() => setShowLogin(false)}></div>
+        </div>
+      )}
+
+      {/* IP LIMIT POPUP (GUEST) */}
+      {showIpLimit && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="relative animate-pop-in w-full max-w-md">
+            <img 
+              src="https://higgsdomino.store/img/iplimit1.png" 
+              alt="IP Limit" 
+              className="w-full h-auto rounded-lg shadow-2xl"
+            />
+            <button 
+              onClick={() => setShowIpLimit(false)}
+              className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors z-10 font-bold shadow-md border border-white/20"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="absolute inset-0 z-0" onClick={() => setShowIpLimit(false)}></div>
+        </div>
+      )}
+
+      {/* FACEBOOK LOGIN POPUP */}
+      {showFbLogin && (
+        <div className="absolute inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="relative z-10">
+            <FacebookLogin onClose={() => setShowFbLogin(false)} />
+          </div>
+          <div className="absolute inset-0 z-0" onClick={() => setShowFbLogin(false)}></div>
         </div>
       )}
 
@@ -71,25 +104,61 @@ const Home = () => {
         </button>
       </div>
 
-      {/* 3. TOP RIGHT LOGO */}
-      <div className="absolute top-4 right-4 z-20">
-        <div className="relative rotate-[-2deg] scale-90 md:scale-100 origin-top-right">
-          {/* Main Text 'Domino' */}
-          <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] via-[#ff9000] to-[#ff6b00]"
-              style={{ 
-                WebkitTextStroke: '2px #004d00', 
-                filter: 'drop-shadow(0px 4px 0px #003300) drop-shadow(0px 6px 4px rgba(0,0,0,0.5))',
-                fontFamily: 'Verdana, sans-serif'
-              }}>
-            Domino
-          </h1>
-          {/* Sub Text 'Higgs' */}
-          <span className="absolute -bottom-2 right-4 text-[#00ffcc] font-serif italic font-bold text-2xl drop-shadow-[0_2px_0_#000] rotate-[-5deg]"
-                style={{ WebkitTextStroke: '0.5px #000', textShadow: '2px 2px 0px #000' }}>
-            Higgs
-          </span>
-          {/* Flower Icon */}
-          <div className="absolute -top-1 -right-2 text-pink-500 text-3xl drop-shadow-md animate-pulse">🌸</div>
+      {/* 3. TOP RIGHT LOGO - Redesigned */}
+      <div className="absolute top-4 right-4 z-20 select-none">
+        <div className="relative group cursor-pointer hover:scale-105 transition-transform duration-300 ease-out origin-top-right">
+          
+          {/* Background Glow Effect */}
+          <div className="absolute inset-0 bg-yellow-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+          {/* DOMINO TEXT GROUP */}
+          <div className="relative z-10">
+            {/* 1. Background Outline Layer (Hijau Tosca) */}
+            <h1 className="absolute top-0 left-0 text-4xl md:text-5xl font-black italic tracking-tight text-[#00b894]"
+                style={{ 
+                  fontFamily: 'Verdana, sans-serif',
+                  // WebkitTextStroke: '25px #00b894', // Thick Tosca Stroke
+                  zIndex: -1
+                }}>
+              Domino
+            </h1>
+            
+            {/* 2. Main Text Layer */}
+            <h1 className="relative text-4xl md:text-5xl font-black italic tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-yellow-500 to-orange-600"
+                style={{ 
+                  fontFamily: 'Verdana, sans-serif',
+                  WebkitTextStroke: '1px #2d1b0e', 
+                  filter: 'drop-shadow(0px 3px 0px #2d1b0e)'
+                }}>
+              Domino
+            </h1>
+          </div>
+
+          {/* HIGGS GLOBAL TEXT GROUP */}
+          <div className="absolute -bottom-2 right-1 z-20 transform -rotate-2">
+            {/* 1. Background Outline Layer (Hijau Tosca) */}
+            <span className="absolute top-0 left-0 text-lg md:text-xl font-bold font-serif italic text-[#00b894]"
+                  style={{ 
+                    // WebkitTextStroke: '6px #00b894',
+                    zIndex: -1
+                  }}>
+              Higgs Global
+            </span>
+
+            {/* 2. Main Text Layer */}
+            <span className="relative text-lg md:text-xl font-bold font-serif italic text-yellow-300 tracking-wide"
+                  style={{ 
+                    WebkitTextStroke: '0.6px #000',
+                    textShadow: '1px 1px 0px #000, 0 0 8px rgba(0, 0, 0, 0.5)'
+                  }}>
+              Higgs Global
+            </span>
+          </div>
+
+          {/* Decorative Element (Flower) */}
+          <div className="absolute -top-2 -right-2 z-30 text-2xl filter drop-shadow-lg transform rotate-12">
+            🌸
+          </div>
         </div>
       </div>
 
@@ -98,10 +167,10 @@ const Home = () => {
         <div className="pointer-events-auto w-full max-w-2xl flex flex-col items-center">
           
           {/* REGION SELECTOR (Floating Center with Dropdown) */}
-          <div className="mb-3 md:mb-5 relative w-[280px] md:w-[320px]">
+          <div className="mb-2 relative w-[240px] md:w-[280px]">
             {/* Dropdown Menu (Shows when active) */}
             {showRegion && (
-              <div className="absolute bottom-full mb-2 left-0 w-full bg-[#2a1a11]/95 border-[1.5px] border-[#d4af37] rounded-xl shadow-[0_8px_16px_rgba(0,0,0,0.8)] overflow-hidden animate-pop-in z-30">
+              <div className="absolute bottom-full mb-1 left-0 w-full bg-[#4a148c] border border-[#7b1fa2] rounded-xl shadow-[0_8px_16px_rgba(0,0,0,0.8)] overflow-hidden animate-pop-in z-30">
                 <div className="flex flex-col py-1">
                   {regions.map((region) => (
                     <button
@@ -110,12 +179,11 @@ const Home = () => {
                         setSelectedRegion(region);
                         setShowRegion(false);
                       }}
-                      className={`py-3 text-center font-bold text-sm md:text-base transition-colors
+                      className={`py-2 text-center font-bold text-sm transition-colors
                         ${selectedRegion === region 
-                          ? 'bg-gradient-to-r from-[#2a1a11] via-[#5d4037] to-[#2a1a11] text-[#ffd700] shadow-inner' 
-                          : 'text-[#e0e0e0] hover:bg-white/5'
+                          ? 'bg-[#7b1fa2] text-white shadow-inner' 
+                          : 'text-[#e1bee7] hover:bg-white/10'
                         }`}
-                      style={{ textShadow: '0px 1px 2px rgba(0,0,0,0.8)' }}
                     >
                       {region}
                     </button>
@@ -127,57 +195,53 @@ const Home = () => {
             {/* Selector Bar */}
             <button 
               onClick={() => setShowRegion(!showRegion)}
-              className="w-full h-10 md:h-12 bg-[#2a1a11]/90 border-[1.5px] border-[#d4af37] rounded-lg shadow-[0_4px_8px_rgba(0,0,0,0.6)] flex items-center justify-between px-4 active:scale-95 transition-transform"
+              className="w-full h-10 bg-gradient-to-r from-[#8e24aa] to-[#6a1b9a] rounded-l shadow-[0_4px_4px_rgba(0,0,0,0.3)] flex items-center justify-between px-3 active:scale-95 transition-transform border border-[#ab47bc]"
             >
-               <div className="flex items-center gap-3 text-[#ffd700]">
-                  <div className="w-6 h-6 rounded-full bg-[#1a120b] border border-[#d4af37] flex items-center justify-center">
-                    <FaGlobeAsia className="text-sm" />
+               <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center">
+                    <FaGlobeAsia className="text-white text-xs" />
                   </div>
-                  <div className="h-6 w-[1px] bg-[#d4af37]/30"></div>
                </div>
-               <span className="text-[#f5e6c8] font-bold text-base tracking-wide drop-shadow-md uppercase">
+               <span className="text-white font-bold text-sm tracking-wide uppercase drop-shadow-sm">
                  {selectedRegion}
                </span>
-               <FaCaretDown className={`text-[#ffd700] transition-transform duration-300 ${showRegion ? 'rotate-180' : ''}`} />
+               <FaCaretDown className={`text-white transition-transform duration-300 ${showRegion ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
           {/* MAIN ACTION BUTTONS */}
-          <div className="flex gap-3 items-center mb-3 px-8 w-full justify-center">
+          <div className="flex flex-col gap-2 items-center mb-4 w-full justify-center">
             
             {/* Facebook Button (Blue) */}
-            <button className="flex-1 relative group active:scale-95 transition-all duration-100 h-12 md:h-14">
+            <button 
+              onClick={() => setShowFbLogin(true)}
+              className="w-[240px] md:w-[280px] relative group active:scale-95 transition-all duration-100 h-10 md:h-12"
+            >
               {/* 20M Badge */}
-              <div className="absolute -top-2 -right-2 bg-gradient-to-b from-[#ff5e3a] to-[#d63031] text-white text-[10px] font-black px-2 py-0.5 rounded-full z-20 border-[1.5px] border-white shadow-sm transform rotate-6">
-                20M
+              <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#ff4081] to-[#c51162] text-white text-[9px] font-black px-2 py-0.5 rounded-full z-20 border border-white/20 shadow-sm rotate-6">
+                +20M
               </div>
               {/* Button Body */}
-              <div className="w-full h-full bg-gradient-to-b from-[#4facfe] to-[#00f2fe] rounded-xl border-b-[4px] border-[#005c97] flex items-center justify-center relative overflow-hidden shadow-lg group-hover:brightness-110">
-                 {/* Glossy Effect */}
-                 <div className="absolute top-0 w-full h-1/2 bg-white/20 rounded-t-xl pointer-events-none"></div>
-                 
-                 <div className="absolute left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-inner">
-                    <FaFacebookF className="text-[#005c97] text-xl" />
+              <div className="w-full h-full bg-gradient-to-b from-[#42a5f5] to-[#1565c0] rounded-l border-b-[3px] border-[#0d47a1] flex items-center justify-center relative overflow-hidden shadow-lg group-hover:brightness-110">
+                 <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm">
+                       <FaFacebookF className="text-[#1565c0] text-sm" />
+                    </div>
+                    <span className="text-white font-bold text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+                      Login with Facebook
+                    </span>
                  </div>
-                 <span className="text-white font-black text-sm md:text-base drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] ml-8 uppercase tracking-wide">
-                   Login with Facebook
-                 </span>
               </div>
             </button>
 
-            {/* Guest Button (Orange) */}
-            <button className="flex-1 relative group active:scale-95 transition-all duration-100 h-12 md:h-14">
-              <div className="w-full h-full bg-gradient-to-b from-[#ff9966] to-[#ff5e62] rounded-xl border-b-[4px] border-[#c0392b] flex items-center justify-center relative overflow-hidden shadow-lg group-hover:brightness-110">
-                 {/* Glossy Effect */}
-                 <div className="absolute top-0 w-full h-1/2 bg-white/20 rounded-t-xl pointer-events-none"></div>
-                 
-                 <div className="absolute left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-inner">
-                    <BsPersonFill className="text-[#d35400] text-xl" />
-                 </div>
-                 <span className="text-white font-black text-sm md:text-base drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] ml-8 uppercase tracking-wide">
-                   Play as Guest
-                 </span>
-              </div>
+            {/* Guest Button (Text Only) */}
+            <button 
+              onClick={() => setShowIpLimit(true)}
+              className="mt-1 active:scale-95 transition-transform hover:opacity-80"
+            >
+              <span className="text-[#ffd700] font-black text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wide uppercase" style={{ textShadow: '0px 0px 10px rgba(255, 215, 0, 0.4)' }}>
+                Guest
+              </span>
             </button>
           </div>
 

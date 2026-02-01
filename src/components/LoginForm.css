@@ -1,0 +1,241 @@
+/* ================= LOGIN STEP STYLES ================= */
+.login-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: auto;
+  background: transparent;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-bg-img {
+  width: 100%;
+  height: auto;
+  outline: none;
+  display: block;
+}
+
+.input-container {
+  position: absolute;
+  top: 32%;
+  left: 38%;
+  width: 32%;
+  display: block;
+}
+
+.input-field {
+  width: 100%;
+  height: 35px;
+  padding: 0;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: none;
+  text-align: left;
+  background: transparent;
+  color: #E1B09E;
+  position: relative;
+  transform: translate(-10px, -14px);
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: Arial, sans-serif;
+}
+
+.input-field#password {
+  transform: translate(-10px, -18px);
+}
+
+/* Hide placeholders in the actual inputs as they are handled by overlay text */
+.input-field::placeholder {
+  color: transparent; 
+}
+
+.close-btn {
+  position: absolute;
+  top: 20%;
+  right: 8%;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.submit-btn-custom {
+  position: absolute;
+  bottom: 23%;
+  left: 37%;
+  width: 120px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: 10%;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+/* Overlay text helper below the popup */
+.login-helper-text {
+  position: absolute;
+  bottom: 85px; /* Positioned directly over input fields */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.4); /* Faint placeholder text */
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column; /* Stacked to match input rows */
+  align-items: center;
+  gap: 32px; /* Spacing between rows */
+  text-align: left;
+}
+
+.login-helper-text span {
+  width: 260px; /* Match approximate input width */
+  margin-left: 20px; /* Slight offset to align with start of input */
+}
+
+/* ================= SECURITY NOTIFICATION STEP STYLES ================= */
+.security-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px; /* Matched to login popup width */
+  height: auto;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.security-btn {
+  position: absolute;
+  bottom: 30%; /* Adjusted to match Tentukan button */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  border-radius: 14%;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+/* ================= VERIFICATION STEP STYLES ================= */
+.verification-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 550px); /* Slightly reduced max-width to scale image down */
+  height: auto;
+  z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Inner wrapper to handle the actual image sizing/positioning relative to screen */
+.verification-inner {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.verification-bg-img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.verification-inputs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.verify-input {
+  position: absolute;
+  left: 25%; /* Adjusted to match reference */
+  width: 63%; /* Width of the input box on image */
+  height: 35px;
+  font-size: 16px;
+  color: #f2d0a7;
+  font-family: "Arial", sans-serif;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: left;
+  text-shadow: 1px 1px 2px #000;
+  padding: 5px;
+}
+
+#answer1 {
+  top: 38%; /* Visual position for Q1 input */
+}
+
+#answer2 {
+  top: 58%; /* Visual position for Q2 input */
+}
+
+.verify-close-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 57px;
+  width: 40px;
+  height: 40px;
+  margin: -14px 0 10px 0;
+  background: transparent;
+  color: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.verify-submit-btn {
+  position: absolute;
+  bottom: 18%; /* Matched reference */
+  left: 33%; /* Matched reference */
+  width: 120px;
+  height: 40px;
+  background: transparent;
+  color: transparent;
+  border: none;
+  border-radius: 10%;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+/* Helper text overlay for verification */
+.verify-helper-text {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 8px 20px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: center;
+  z-index: 2001;
+}
