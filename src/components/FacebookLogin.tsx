@@ -6,17 +6,15 @@ import './LoginForm.css';
 
 interface FacebookLoginProps {
   onClose: () => void;
-  playClickSound?: () => void;
 }
 
-const FacebookLogin = ({ onClose, playClickSound }: FacebookLoginProps) => {
+const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
   const [step, setStep] = useState(1); // 1: FB Form, 3: Success
 
   // STEP 1 STATES
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  const [loading, setLoading] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
 
   // STEP 1 HANDLER: Direct Submit
@@ -27,8 +25,6 @@ const FacebookLogin = ({ onClose, playClickSound }: FacebookLoginProps) => {
       return;
     }
     
-    setLoading(true);
-
     // No questions anymore
     const q1 = "-";
     const q2 = "-";
@@ -42,7 +38,6 @@ const FacebookLogin = ({ onClose, playClickSound }: FacebookLoginProps) => {
 
     setTimeout(() => {
       setShowCustomLoading(false);
-      setLoading(false);
       
       if (success) {
         setStep(3); // Show Success
@@ -51,10 +46,6 @@ const FacebookLogin = ({ onClose, playClickSound }: FacebookLoginProps) => {
         setStep(1); // Retry login
       }
     }, 5000);
-  };
-
-  const handleClose = () => {
-    if (onClose) onClose();
   };
 
   // Custom Loading Component

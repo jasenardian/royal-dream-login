@@ -120,7 +120,6 @@ const Home = () => {
           <div className="relative z-10">
             <FacebookLogin 
               onClose={() => { playClickSound(); setShowFbLogin(false); }} 
-              playClickSound={playClickSound}
             />
           </div>
           <div className="absolute inset-0 z-0" onClick={() => {}}></div>
