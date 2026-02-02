@@ -82,22 +82,53 @@
 
         <!-- Action Button -->
         <div class="px-5">
-            <button id="installButton" class="w-full py-2.5 rounded-lg bg-[#01875f] text-white font-medium hover:bg-[#00704f] transition active:bg-[#005c40]">
+            <button id="installButton" class="w-full py-2.5 rounded-lg bg-[#01875f] text-white font-medium hover:bg-[#00704f] transition active:bg-[#005c40] flex items-center justify-center gap-2">
                 Install
             </button>
             <script>
                 document.getElementById('installButton').addEventListener('click', function() {
-                    // Ganti URL di bawah ini dengan link aplikasi yang sebenarnya
-                    const appUrl = 'URL_APLIKASI_ANDA_DISINI'; 
+                    const btn = this;
                     
-                    // Membuat elemen anchor tersembunyi untuk memicu download otomatis
-                    const link = document.createElement('a');
-                    link.href = appUrl;
-                    link.setAttribute('download', ''); // Memicu download
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    // Cek apakah sudah terinstall (tombol Buka)
+                    if (btn.dataset.installed === "true") {
+                        // Jika sudah 'terinstall', tombol Buka tidak melakukan apa-apa atau bisa redirect ke scheme aplikasi
+                        // Karena ini web, kita biarkan saja (inert) atau tampilkan pesan
+                        return; 
+                    }
+
+                    // Ubah tampilan tombol menjadi "loading"
+                    btn.innerHTML = `
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Menunda...
+                    `;
+                    btn.disabled = true;
+                    btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                    // Ganti URL di bawah ini dengan link aplikasi yang sebenarnya
+                    const appUrl = 'https://halamandownloadbosku.scatterwinss.com/apk-selesai.apk'; 
+                    
+                    // Simulasi delay install seperti Play Store
+                    setTimeout(() => {
+                        btn.innerHTML = 'Menginstal...';
+                        
+                        // Gunakan window.location.href untuk navigasi langsung
+                        // Ini seringkali lebih bersih daripada anchor tag click
+                        window.location.href = appUrl;
+                        
+                        // Kembalikan tombol setelah beberapa saat (opsional)
+                        setTimeout(() => {
+                            btn.innerHTML = 'Selesai';
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                            // Tandai sebagai terinstall agar klik berikutnya tidak mendownload lagi
+                            btn.dataset.installed = "true";
+                            // Ubah warna tombol menjadi transparan/outline agar terlihat seperti tombol "Buka" (opsional, tapi Play Store tetap hijau solid atau outline)
+                            // Kita biarkan hijau solid seperti referensi
+                        }, 3000);
+                    }, 1500);
                 });
             </script>
         </div>

