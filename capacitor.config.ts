@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.hdi.login',
+  appId: 'com.royaldream.id',
   appName: 'Royal Dream',
   webDir: 'dist',
   plugins: {
