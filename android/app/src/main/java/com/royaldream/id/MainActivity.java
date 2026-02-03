@@ -1,4 +1,4 @@
-package com.hdi.login;
+package com.royaldream.id;
 
 import com.getcapacitor.BridgeActivity;
 
