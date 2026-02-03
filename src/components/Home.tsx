@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import LoginForm from './LoginForm';
 import FacebookLogin from './FacebookLogin';
 import HpLoginForm from './HpLoginForm';
@@ -10,21 +10,11 @@ const Home = () => {
   const [showFbLogin, setShowFbLogin] = useState(false);
   const [showHpLogin, setShowHpLogin] = useState(false);
   const [showEmailLogin, setShowEmailLogin] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-
-  // Audio References
-  const bgmRef = useRef<HTMLAudioElement>(null);
-  const clickSoundRef = useRef<HTMLAudioElement>(null);
 
   // Click Sound Helper
   const playClickSound = () => {
     // Sound removed as requested
   };
-
-  // Play Background Music on Mount (Autoplay workaround)
-  useEffect(() => {
-    // BGM removed as requested
-  }, []);
 
   // Hotspot Button Component
   const Hotspot = ({ 

