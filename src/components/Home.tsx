@@ -45,7 +45,7 @@ const Home = () => {
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: `url('https://gambar.scatterwinss.com/img/bg-royal.jpg')`,
+          backgroundImage: `url('https://i.ibb.co.com/tMm8qYDG/bg-royal.jpg')`,
         }}
       >
       </div>
