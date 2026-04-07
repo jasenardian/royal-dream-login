@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     namespace = "com.royaldream.id"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildToolsVersion = rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.royaldream.id"
         minSdkVersion rootProject.ext.minSdkVersion
