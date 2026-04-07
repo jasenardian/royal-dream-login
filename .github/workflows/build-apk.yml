@@ -32,6 +32,9 @@ jobs:
       - name: Build Web Assets
         run: npm run build
 
+      - name: Verify Web Assets
+        run: ls -R dist/
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -44,7 +47,7 @@ jobs:
       # STEP REMOVED: npx cap add android (Folder android already exists in repo)
 
       - name: Sync Capacitor
-        run: npx cap sync android --verbose
+        run: npx cap sync android
 
       - name: Build APK (Debug)
         run: |
