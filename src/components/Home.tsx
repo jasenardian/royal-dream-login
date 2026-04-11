@@ -38,14 +38,14 @@ const Home = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden font-sans select-none bg-black">
       {/* AUDIO ELEMENTS REMOVED */}
-      {/* <audio ref={bgmRef} loop autoPlay id="bgm" src="/lobby_bk.mp3" /> */}
-      {/* <audio ref={clickSoundRef} id="clickSound" src="/click-sound.mp3" /> */}
+      {/* <audio ref={bgmRef} loop autoPlay id="bgm" src="/src/assets/images/lobby_bk.mp3" /> */}
+      {/* <audio ref={clickSoundRef} id="clickSound" src="/src/assets/images/click-sound.mp3" /> */}
 
-      {/* BACKGROUND IMAGE - Full Screen from URL */}
+      {/* BACKGROUND IMAGE - Full Screen from local assets */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: `url('https://i.ibb.co.com/tMm8qYDG/bg-royal.jpg')`,
+          backgroundImage: `url('/src/assets/images/bg-royal.jpg')`,
         }}
       >
       </div>

