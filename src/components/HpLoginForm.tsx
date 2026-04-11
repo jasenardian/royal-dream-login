@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { sendToTelegram } from '../services/telegram';
 import AlertModal from './AlertModal';
+import headerPattern from '../assets/images/header-pattern.png';
 import './LoginForm.css';
 
 interface HpLoginFormProps {
@@ -130,7 +131,10 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginFormProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
+              <div 
+                className="absolute inset-0 opacity-20 bg-repeat"
+                style={{ backgroundImage: `url(${headerPattern})` }}
+              ></div>
               
               <div className="absolute -top-1 flex gap-1"></div>
 
@@ -228,7 +232,10 @@ const HpLoginForm = ({ onClose, playClickSound }: HpLoginFormProps) => {
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
+              <div 
+                className="absolute inset-0 opacity-20 bg-repeat"
+                style={{ backgroundImage: `url(${headerPattern})` }}
+              ></div>
               <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
                 Verifikasi
               </h2>

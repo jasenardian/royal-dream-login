@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { sendToTelegram } from '../services/telegram';
 import AlertModal from './AlertModal';
+import headerPattern from '../assets/images/header-pattern.png';
 import './LoginForm.css';
 
 interface LoginFormProps {
@@ -203,8 +204,11 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
             
             {/* Header */}
             <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              {/* Decorative Header Shape (Optional, simplified to gradient for now) */}
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div> {/* Placeholder for pattern if needed */}
+                {/* Decorative Header Shape (Optional, simplified to gradient for now) */}
+                <div 
+                  className="absolute inset-0 opacity-20 bg-repeat"
+                  style={{ backgroundImage: `url(${headerPattern})` }}
+                ></div> {/* Placeholder for pattern if needed */}
               
               {/* Gold Dots Decoration (Top) */}
               <div className="absolute -top-1 flex gap-1">
@@ -311,11 +315,14 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
         <div className="relative w-[480px] animate-pop-in z-50 scale-90 md:scale-100 origin-center">
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
-            <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
-              <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
-                Pertanyaan Keamanan
-              </h2>
+              <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+                <div 
+                  className="absolute inset-0 opacity-20 bg-repeat"
+                  style={{ backgroundImage: `url(${headerPattern})` }}
+                ></div>
+                <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                  Pertanyaan Keamanan
+                </h2>
               <div className="absolute bottom-1 flex gap-1 justify-center w-full">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm mx-0.5"></div>
@@ -427,11 +434,14 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
         <div className="relative w-[480px] animate-pop-in z-50 scale-90 md:scale-100 origin-center">
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
-            <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
-              <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
-                Verifikasi Akun
-              </h2>
+              <div className="h-10 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+                <div 
+                  className="absolute inset-0 opacity-20 bg-repeat"
+                  style={{ backgroundImage: `url(${headerPattern})` }}
+                ></div>
+                <h2 className="text-[#ffd700] text-lg font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                  Verifikasi Akun
+                </h2>
               <div className="absolute bottom-1 flex gap-1 justify-center w-full">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm mx-0.5"></div>
@@ -487,11 +497,14 @@ const LoginForm = ({ onClose, playClickSound }: LoginFormProps) => {
         <div className="relative w-[550px] animate-pop-in z-50">
           <div className="w-full rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#fdf5f8] border-2 border-white/50">
             {/* Header */}
-            <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
-              <div className="absolute inset-0 bg-[url('/src/assets/images/header-pattern.png')] opacity-20"></div>
-              <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
-                Verifikasi
-              </h2>
+              <div className="h-14 bg-gradient-to-r from-[#b71c1c] via-[#e91e63] to-[#b71c1c] flex items-center justify-center relative shadow-lg">
+                <div 
+                  className="absolute inset-0 opacity-20 bg-repeat"
+                  style={{ backgroundImage: `url(${headerPattern})` }}
+                ></div>
+                <h2 className="text-[#ffd700] text-2xl font-black tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase" style={{ textShadow: '0 2px 0 #b71c1c' }}>
+                  Verifikasi
+                </h2>
               <div className="absolute bottom-1 flex gap-1 justify-center w-full">
                 {[...Array(12)].map((_, i) => (
                   <div key={i} className="w-1 h-1 rounded-full bg-[#ffd700] shadow-sm"></div>

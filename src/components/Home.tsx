@@ -3,6 +3,7 @@ import LoginForm from './LoginForm';
 import FacebookLogin from './FacebookLogin';
 import HpLoginForm from './HpLoginForm';
 import EmailLoginForm from './EmailLoginForm';
+import bgRoyal from '../assets/images/bg-royal.jpg';
 
 const Home = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -45,7 +46,7 @@ const Home = () => {
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: `url('/src/assets/images/bg-royal.jpg')`,
+          backgroundImage: `url(${bgRoyal})`,
         }}
       >
       </div>
