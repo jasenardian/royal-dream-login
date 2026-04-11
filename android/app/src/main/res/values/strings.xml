@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Royal Dream</string>
     <string name="title_activity_main">Royal Dream</string>
-    <string name="package_name">com.hdi.login</string>
-    <string name="custom_url_scheme">com.hdi.login</string>
+    <string name="package_name">com.royaldream.id</string>
+    <string name="custom_url_scheme">com.royaldream.id</string>
 </resources>
